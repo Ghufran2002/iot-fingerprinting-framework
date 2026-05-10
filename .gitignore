@@ -1,0 +1,54 @@
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ─────────────────────────────────────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ── Jupyter ──────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Large dataset files (download via: python train.py --download) ───────────
+data/nbaiot/
+data/iot_flows_real.csv
+data/nbaiot_raw.zip
+
+# ── Trained model binaries (regenerate via: python train.py) ─────────────────
+models/*.pkl
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Personal / binary documents ──────────────────────────────────────────────
+*.docx
+*.pptx
+*.pdf
+
+# ── pytest cache ─────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
