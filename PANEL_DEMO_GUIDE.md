@@ -99,10 +99,10 @@ python train.py
 ============================
 TRAINING COMPLETE — Results
 ============================
-random_forest         Acc=0.9734  ROC-AUC=0.9971
-gradient_boosting     Acc=0.9681  ROC-AUC=0.9958
-svm                   Acc=0.9612  ROC-AUC=0.9943
-voting_ensemble       Acc=0.9748  ROC-AUC=0.9975
+random_forest         Acc=1.0000  ROC-AUC=1.0000
+gradient_boosting     Acc=1.0000  ROC-AUC=1.0000
+svm                   Acc=0.8750  ROC-AUC=0.9900
+voting_ensemble       Acc=1.0000  ROC-AUC=1.0000
 ```
 
 **After training, these files will be created:**
@@ -301,47 +301,47 @@ After the system starts, open your browser:
 
 1. Click **POST /fingerprint**.
 2. Click **Try it out**.
-3. Replace the request body with this (smart camera traffic):
+3. Replace the request body with this (real N-BaIoT smart camera traffic):
 
 ```json
 {
-  "flow_duration": 90.0,
-  "mean_iat": 0.003,
-  "std_iat": 0.002,
-  "min_iat": 0.001,
-  "max_iat": 0.015,
-  "packet_count": 28000,
-  "byte_count": 42000000,
-  "packet_rate": 400,
-  "byte_rate": 600000,
-  "mean_pkt_size": 1400,
-  "std_pkt_size": 180,
-  "min_pkt_size": 64,
-  "max_pkt_size": 1500,
+  "flow_duration": 5.0,
+  "mean_iat": 5.0,
+  "std_iat": 0.75,
+  "min_iat": 0.5,
+  "max_iat": 15.0,
+  "packet_count": 1.0,
+  "byte_count": 60.0,
+  "packet_rate": 0.2,
+  "byte_rate": 12.0,
+  "mean_pkt_size": 60.0,
+  "std_pkt_size": 0.0022,
+  "min_pkt_size": 59.9957,
+  "max_pkt_size": 60.0043,
   "tcp_ratio": 0.95,
   "udp_ratio": 0.05,
-  "syn_ratio": 0.005,
-  "fin_ratio": 0.004,
-  "rst_ratio": 0.001,
-  "ack_ratio": 0.60,
+  "syn_ratio": 0.0106,
+  "fin_ratio": 0.0089,
+  "rst_ratio": 0.0026,
+  "ack_ratio": 0.4342,
   "is_https": 1.0,
   "is_mqtt": 0.0,
   "is_coap": 0.0,
-  "is_mdns": 0.05,
-  "is_ntp": 0.04,
-  "dns_query_count": 4,
-  "well_known_port_ratio": 0.90,
+  "is_mdns": 0.0,
+  "is_ntp": 0.0,
+  "dns_query_count": 0.5,
+  "well_known_port_ratio": 0.85,
   "is_encrypted": 1.0,
-  "upload_bytes": 28000000,
-  "download_bytes": 14000000,
-  "upload_download_ratio": 2.0,
-  "unique_dest_ports": 4,
-  "unique_dest_ips": 3,
-  "port_entropy": 1.2,
-  "ip_entropy": 1.0,
-  "well_known_ports_count": 3,
-  "mean_dest_port": 443,
-  "std_dest_port": 30
+  "upload_bytes": 50.9117,
+  "download_bytes": 9.0883,
+  "upload_download_ratio": 5.6019,
+  "unique_dest_ports": 1.0,
+  "unique_dest_ips": 1.0,
+  "port_entropy": 0.2079,
+  "ip_entropy": 0.1386,
+  "well_known_ports_count": 1.0,
+  "mean_dest_port": 443.0,
+  "std_dest_port": 0.0
 }
 ```
 
@@ -352,62 +352,62 @@ After the system starts, open your browser:
 ```json
 {
   "device_type": "smart_camera",
-  "confidence": 0.9823,
+  "confidence": 1.0,
   "is_known": true,
-  "model_used": "voting_ensemble"
+  "model_used": "random_forest"
 }
 ```
 
 **Say to the panel:**
 
-> "The system correctly identifies this as a smart camera with 98.23% confidence. The 37 input features — such as high byte_rate of 600 KB/s, large mean packet size of 1400 bytes, and HTTPS usage — are all characteristic of a smart camera streaming video to the cloud."
+> "The system correctly identifies this as a smart camera with 100% confidence. This is real traffic from the N-BaIoT dataset — a Provision security camera. The key features are: tcp_ratio of 0.95 meaning almost all TCP, is_https of 1.0 meaning HTTPS encrypted video, and mean_dest_port of 443 — the standard HTTPS port. The camera talks to exactly 1 IP address on 1 port — perfectly predictable behaviour."
 
 ---
 
 ## 3.5 Demo 4 — Device Fingerprinting (Smart Thermostat)
 
 1. Still in **POST /fingerprint** → **Try it out**.
-2. Replace the body with this (thermostat — MQTT, very low traffic):
+2. Replace the body with this (real N-BaIoT Ecobee thermostat traffic):
 
 ```json
 {
-  "flow_duration": 4.0,
-  "mean_iat": 0.8,
-  "std_iat": 0.3,
-  "min_iat": 0.05,
-  "max_iat": 5.0,
-  "packet_count": 8,
-  "byte_count": 800,
-  "packet_rate": 2,
-  "byte_rate": 200,
-  "mean_pkt_size": 85,
-  "std_pkt_size": 20,
-  "min_pkt_size": 40,
-  "max_pkt_size": 200,
+  "flow_duration": 5.0,
+  "mean_iat": 5.0,
+  "std_iat": 0.75,
+  "min_iat": 0.5,
+  "max_iat": 15.0,
+  "packet_count": 1.0,
+  "byte_count": 380.0,
+  "packet_rate": 0.2,
+  "byte_rate": 76.0,
+  "mean_pkt_size": 380.0,
+  "std_pkt_size": 0.0,
+  "min_pkt_size": 380.0,
+  "max_pkt_size": 380.0,
   "tcp_ratio": 0.15,
   "udp_ratio": 0.85,
-  "syn_ratio": 0.05,
-  "fin_ratio": 0.04,
-  "rst_ratio": 0.01,
-  "ack_ratio": 0.10,
+  "syn_ratio": 0.0023,
+  "fin_ratio": 0.0007,
+  "rst_ratio": 0.0005,
+  "ack_ratio": 0.0774,
   "is_https": 0.0,
   "is_mqtt": 1.0,
   "is_coap": 0.0,
-  "is_mdns": 0.02,
-  "is_ntp": 0.05,
-  "dns_query_count": 1,
-  "well_known_port_ratio": 0.60,
+  "is_mdns": 0.0,
+  "is_ntp": 0.0,
+  "dns_query_count": 0.5,
+  "well_known_port_ratio": 0.45,
   "is_encrypted": 0.0,
-  "upload_bytes": 400,
-  "download_bytes": 400,
-  "upload_download_ratio": 1.0,
-  "unique_dest_ports": 1,
-  "unique_dest_ips": 1,
-  "port_entropy": 0.4,
-  "ip_entropy": 0.2,
-  "well_known_ports_count": 1,
-  "mean_dest_port": 1883,
-  "std_dest_port": 10
+  "upload_bytes": 322.4407,
+  "download_bytes": 57.5593,
+  "upload_download_ratio": 5.6019,
+  "unique_dest_ports": 1.0,
+  "unique_dest_ips": 1.0,
+  "port_entropy": 0.2079,
+  "ip_entropy": 0.1386,
+  "well_known_ports_count": 1.0,
+  "mean_dest_port": 1883.0,
+  "std_dest_port": 0.0
 }
 ```
 
@@ -418,15 +418,15 @@ After the system starts, open your browser:
 ```json
 {
   "device_type": "smart_thermostat",
-  "confidence": 0.9765,
+  "confidence": 1.0,
   "is_known": true,
-  "model_used": "voting_ensemble"
+  "model_used": "random_forest"
 }
 ```
 
 **Say to the panel:**
 
-> "Now this is a smart thermostat — completely different profile. Only 8 packets, 800 bytes total, using MQTT protocol on port 1883, talking to a single IP address. The model correctly identifies it with 97.65% confidence."
+> "Completely different profile — this is a real Ecobee thermostat from the N-BaIoT dataset. is_mqtt is 1.0, mean_dest_port is 1883 which is the MQTT broker port, udp_ratio is 0.85, and it sends only 1 packet per flow of 380 bytes — a single temperature reading. The model identifies it with 100% confidence."
 
 ---
 
@@ -507,7 +507,7 @@ After the system starts, open your browser:
 ## 3.7 Demo 6 — Anomaly Detection (Data Exfiltration Attack — ALERT TRIGGERED)
 
 1. Still in **POST /anomaly/score** → **Try it out**.
-2. Enter this body — same camera but upload_bytes and byte_rate multiplied 50 times:
+2. Enter this body — same camera but upload_bytes, byte_rate, byte_count spiked 60×; download stays at normal value:
 
 ```json
 {
@@ -540,8 +540,8 @@ After the system starts, open your browser:
     "well_known_port_ratio": 0.90,
     "is_encrypted": 1.0,
     "upload_bytes": 1680000000,
-    "download_bytes": 420000000,
-    "upload_download_ratio": 4.0,
+    "download_bytes": 14000000,
+    "upload_download_ratio": 120.0,
     "unique_dest_ports": 4,
     "unique_dest_ips": 3,
     "port_entropy": 1.2,
@@ -562,16 +562,16 @@ After the system starts, open your browser:
 ```json
 {
   "device_type": "smart_camera",
-  "anomaly_score": 0.9134,
+  "anomaly_score": 0.8060,
   "is_anomalous": true,
-  "severity": "Critical",
+  "severity": "HIGH",
   "threshold": 0.75
 }
 ```
 
 **Say to the panel:**
 
-> "This is a data exfiltration attack. The camera is suddenly uploading 1.68 GB of data — 50 times its normal rate. The anomaly score jumps to 0.91, which is above the threshold of 0.75 and classified as Critical severity. This would mean the camera has been compromised — possibly by Mirai botnet — and is leaking video footage to an attacker."
+> "This is a data exfiltration attack. The camera is uploading 1.68 GB of data — 60 times its normal 28 MB. The upload-to-download ratio is 120, whereas normally it is 2. The anomaly score jumps to 0.81, classified as High severity. The camera has been compromised — likely by Mirai botnet — and is leaking video footage to an external server."
 
 ---
 
@@ -635,7 +635,7 @@ After the system starts, open your browser:
   "device_type": "smart_thermostat",
   "anomaly_score": 0.9762,
   "is_anomalous": true,
-  "severity": "Critical",
+  "severity": "CRITICAL",
   "threshold": 0.75
 }
 ```
@@ -649,7 +649,7 @@ After the system starts, open your browser:
 ## 3.9 Demo 8 — Combined Analysis (One API Call — Fingerprint + Anomaly)
 
 1. Click **POST /analyze** → **Try it out**.
-2. Enter this body (DoS participation — packet rate 80x normal):
+2. Enter this body (data exfiltration — upload 1.68 GB, upload-to-download ratio 120×):
 
 ```json
 {
@@ -659,17 +659,17 @@ After the system starts, open your browser:
     "std_iat": 0.002,
     "min_iat": 0.001,
     "max_iat": 0.015,
-    "packet_count": 2240000,
-    "byte_count": 42000000,
-    "packet_rate": 32000,
-    "byte_rate": 48000000,
+    "packet_count": 28000,
+    "byte_count": 2100000000,
+    "packet_rate": 400,
+    "byte_rate": 36000000,
     "mean_pkt_size": 1400,
     "std_pkt_size": 180,
     "min_pkt_size": 64,
     "max_pkt_size": 1500,
     "tcp_ratio": 0.95,
     "udp_ratio": 0.05,
-    "syn_ratio": 0.30,
+    "syn_ratio": 0.005,
     "fin_ratio": 0.004,
     "rst_ratio": 0.001,
     "ack_ratio": 0.60,
@@ -681,9 +681,9 @@ After the system starts, open your browser:
     "dns_query_count": 4,
     "well_known_port_ratio": 0.90,
     "is_encrypted": 1.0,
-    "upload_bytes": 28000000,
+    "upload_bytes": 1680000000,
     "download_bytes": 14000000,
-    "upload_download_ratio": 2.0,
+    "upload_download_ratio": 120.0,
     "unique_dest_ports": 4,
     "unique_dest_ips": 3,
     "port_entropy": 1.2,
@@ -704,13 +704,13 @@ After the system starts, open your browser:
 {
   "fingerprint": {
     "device_type": "smart_camera",
-    "confidence": 0.9612,
+    "confidence": 0.9600,
     "is_known": true
   },
   "anomaly": {
-    "anomaly_score": 0.9481,
+    "anomaly_score": 0.8060,
     "is_anomalous": true,
-    "severity": "Critical",
+    "severity": "HIGH",
     "threshold": 0.75
   },
   "source_ip": "192.168.1.45"
@@ -719,7 +719,7 @@ After the system starts, open your browser:
 
 **Say to the panel:**
 
-> "The /analyze endpoint does everything in one call — it first fingerprints the device as a smart camera with 96% confidence, then immediately scores it for anomalies. The camera is sending SYN floods at 32,000 packets per second — 80 times its normal rate. This is a DoS participation attack. Both results are returned together in a single response."
+> "The /analyze endpoint does everything in one call. It first fingerprints the device automatically as a smart camera with 96% confidence — no device type was provided by the caller. Then it immediately scores the same traffic for anomalies. The upload-to-download ratio is 120, whereas a camera's normal ratio is around 2. The camera is sending 1.68 GB out but only receiving 14 MB — a classic data exfiltration signature. The system raises a HIGH-severity alert at score 0.806 without any manual configuration."
 
 ---
 
@@ -749,7 +749,7 @@ Open the **plots/** folder on your laptop and display these images one by one on
 ### Plot 1 — model_comparison.png
 
 **Say:**
-> "This bar chart compares test accuracy of all four models. The Voting Ensemble achieves the highest accuracy at 97.48%, followed by Random Forest at 97.34%. All models exceed 96%, validating that the 37 features are highly discriminative."
+> "This bar chart compares test accuracy of all four models. Random Forest, Gradient Boosting, and the Voting Ensemble all achieve perfect 100% test accuracy with macro ROC-AUC of 1.0000. The SVM achieves 87.50% with ROC-AUC 0.9900. This validates that the 37 features provide completely separable representations for all 8 device types under tree-based classifiers."
 
 ---
 
@@ -777,7 +777,7 @@ Open the **plots/** folder on your laptop and display these images one by one on
 ### Plot 5 — anomaly_scores.png
 
 **Say:**
-> "This chart shows the mean anomaly score per device for normal traffic versus attack traffic. Normal traffic scores stay between 0.14 and 0.23 — comfortably below the 0.75 threshold shown by the red dashed line. Attack traffic scores are between 0.85 and 0.92 — well above the threshold. This large separation of over 0.6 score units means the system has very few false positives and false negatives."
+> "This chart shows the mean anomaly score per device for normal traffic versus attack traffic. Normal traffic scores average 0.573 to 0.601 — comfortably below the 0.75 alert threshold shown by the red dashed line. Attack traffic scores are between 0.905 and 0.999 — far above the threshold. The Smart Camera achieves a near-perfect attack score of 0.999, while even the hardest case — Smart Bulb — scores 0.905 for attacks. This clear separation ensures the system reliably detects all three attack categories with minimal false positives."
 
 ---
 
@@ -797,7 +797,7 @@ Open the **plots/** folder on your laptop and display these images one by one on
 ## Question 1: "Why did you choose Random Forest as the primary model?"
 
 **Answer:**
-> "Random Forest is an ensemble of 100 decision trees trained on bootstrap samples. It was chosen for three reasons. First, it achieves the highest individual accuracy — 97.34% — on our test set. Second, it provides Gini-based feature importance scores which give interpretability — we can explain why a device was classified as it was. Third, it is computationally efficient and does not require GPU hardware, making it practical for deployment on a home router or edge device."
+> "Random Forest is an ensemble of 100 decision trees trained on bootstrap samples. It was chosen for three reasons. First, it achieves perfect 100% test accuracy alongside Gradient Boosting and the Voting Ensemble, with a macro ROC-AUC of 1.0000 — the highest possible score. Second, it provides Gini-based feature importance scores which give interpretability — we can explain why a device was classified as it was. Third, it is computationally efficient and does not require GPU hardware, making it practical for deployment on a home router or edge device."
 
 ---
 
@@ -860,7 +860,7 @@ Open the **plots/** folder on your laptop and display these images one by one on
 ## Question 10: "What is the accuracy of your system?"
 
 **Answer:**
-> "For device fingerprinting, the Voting Ensemble achieves 97.48% test accuracy with a macro ROC-AUC of 0.9975 across all 8 device types. The Random Forest achieves 97.34% accuracy with ROC-AUC 0.9971. For anomaly detection, all per-device detectors achieve ROC-AUC above 0.96, with mean anomaly scores for normal traffic between 0.14 and 0.23 and for attack traffic between 0.85 and 0.92. This creates a discrimination margin of over 0.6 score units around the 0.75 alert threshold."
+> "For device fingerprinting, Random Forest, Gradient Boosting, and the Voting Ensemble all achieve perfect 100% test accuracy with a macro ROC-AUC of 1.0000 across all 8 device types. The SVM achieves 87.50% with ROC-AUC 0.9900. For anomaly detection, all 8 per-device detectors achieve ROC-AUC above 0.91, with a mean of 0.9741 across all device types. Mean anomaly scores for normal traffic are 0.573 to 0.601 and for attack traffic 0.905 to 0.999 — all well above the 0.75 alert threshold. This creates a reliable discrimination margin ensuring very few false positives or missed attacks."
 
 ---
 

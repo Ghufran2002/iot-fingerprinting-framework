@@ -19,6 +19,7 @@ class Preprocessor:
     def __init__(self):
         self.scaler = RobustScaler()
         self.label_encoder = LabelEncoder()
+        self._train_medians: pd.Series = None
         self._fitted = False
 
     def fit_transform(self, df: pd.DataFrame):
@@ -27,7 +28,8 @@ class Preprocessor:
         y_labels = df['device_type'].values
 
         X.replace([np.inf, -np.inf], np.nan, inplace=True)
-        X.fillna(X.median(), inplace=True)
+        self._train_medians = X.median()
+        X.fillna(self._train_medians, inplace=True)
         X = X.clip(lower=0)
 
         y = np.array([DEVICE_LABEL_MAP[d] for d in y_labels])
@@ -53,7 +55,7 @@ class Preprocessor:
         assert self._fitted, "Call fit_transform first"
         X = X[FEATURE_NAMES].copy()
         X.replace([np.inf, -np.inf], np.nan, inplace=True)
-        X.fillna(X.median(), inplace=True)
+        X.fillna(self._train_medians, inplace=True)
         X = X.clip(lower=0)
         return self.scaler.transform(X)
 
@@ -66,6 +68,8 @@ class Preprocessor:
     def save(self):
         MODELS_DIR.mkdir(exist_ok=True)
         joblib.dump(self.scaler, MODELS_DIR / "scaler.pkl")
+        if self._train_medians is not None:
+            joblib.dump(self._train_medians, MODELS_DIR / "train_medians.pkl")
         logger.info("Scaler saved.")
 
     def load(self):
@@ -73,6 +77,11 @@ class Preprocessor:
         if not path.exists():
             raise FileNotFoundError(f"Scaler not found at {path}. Run train.py first.")
         self.scaler = joblib.load(path)
+        medians_path = MODELS_DIR / "train_medians.pkl"
+        if medians_path.exists():
+            self._train_medians = joblib.load(medians_path)
+        else:
+            self._train_medians = pd.Series(0.0, index=FEATURE_NAMES)
         self._fitted = True
         logger.info("Scaler loaded.")
 

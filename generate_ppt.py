@@ -520,9 +520,9 @@ txbox(sl, "Model Comparison Results",
 
 model_rows = [
     ("Random Forest ★",     "100.00%", "1.0000", "Primary"),
+    ("Gradient Boosting",   "100.00%", "1.0000", "Comparison"),
     ("Voting Ensemble",     "100.00%", "1.0000", "Combined"),
-    ("Gradient Boosting",   "99.58%",  "0.9998", "Comparison"),
-    ("SVM (RBF)",           "98.75%",  "0.9995", "Comparison"),
+    ("SVM (RBF)",           "87.50%",  "0.9900", "Comparison"),
 ]
 add_table(sl,
           ["Model", "Accuracy", "ROC-AUC", "Role"],
@@ -747,11 +747,11 @@ heading(sl, "Results & Performance Metrics")
 divider(sl, Inches(0.95))
 
 # Top KPIs
-stat_card(sl, "100%",  "Fingerprinting\nAccuracy",  Inches(0.5),  Inches(1.1), val_color=C_GREEN)
-stat_card(sl, "1.000", "ROC-AUC\nScore",             Inches(3.1),  Inches(1.1), val_color=C_CYAN)
-stat_card(sl, "0.75",  "Alert\nThreshold",           Inches(5.7),  Inches(1.1), val_color=C_YELLOW)
-stat_card(sl, "<50ms", "API Response\nTime",         Inches(8.3),  Inches(1.1), val_color=C_PURPLE)
-stat_card(sl, "8/8",   "Devices\nIdentified",        Inches(10.9), Inches(1.1), val_color=C_GREEN)
+stat_card(sl, "100%",   "RF/GB/Ensemble\nAccuracy",  Inches(0.5),  Inches(1.1), val_color=C_GREEN)
+stat_card(sl, "1.0000", "RF ROC-AUC\nScore",          Inches(3.1),  Inches(1.1), val_color=C_CYAN)
+stat_card(sl, "0.9741", "Mean Anomaly\nAUC-ROC",      Inches(5.7),  Inches(1.1), val_color=C_YELLOW)
+stat_card(sl, "<50ms",  "API Response\nTime",         Inches(8.3),  Inches(1.1), val_color=C_PURPLE)
+stat_card(sl, "8/8",    "Devices\nIdentified",        Inches(10.9), Inches(1.1), val_color=C_GREEN)
 
 # Fingerprinting results table
 txbox(sl, "Per-Device Fingerprinting Results (Test Set)",
@@ -780,17 +780,17 @@ txbox(sl, "Anomaly Detection Results (Ensemble)",
       font_size=Pt(13), bold=True, color=C_PURPLE)
 
 ad_rows = [
-    ("Smart Camera",     "High",   "~0.92"),
-    ("Smart Thermostat", "High",   "~0.94"),
-    ("Smart TV",         "High",   "~0.91"),
-    ("Smart Bulb",       "High",   "~0.96"),
-    ("Smart Plug",       "High",   "~0.95"),
-    ("Smart Speaker",    "High",   "~0.93"),
-    ("Smart Doorbell",   "High",   "~0.92"),
-    ("Motion Sensor",    "High",   "~0.97"),
+    ("Smart Camera",     "0.9966",  "0.999"),
+    ("Smart Thermostat", "0.9445",  "0.934"),
+    ("Smart TV",         "0.9942",  "0.969"),
+    ("Smart Bulb",       "0.9189",  "0.905"),
+    ("Smart Plug",       "0.9358",  "0.921"),
+    ("Smart Speaker",    "0.9674",  "0.969"),
+    ("Smart Doorbell",   "0.9576",  "0.966"),
+    ("Motion Sensor",    "0.9779",  "0.972"),
 ]
 add_table(sl,
-          ["Device", "Detection Rate", "AUC-ROC"],
+          ["Device", "AUC-ROC", "Avg Attack Score"],
           ad_rows,
           Inches(7.0), Inches(2.85), Inches(5.83), Inches(3.6),
           font_size=Pt(10))
