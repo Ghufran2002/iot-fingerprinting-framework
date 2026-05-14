@@ -47,6 +47,22 @@ desktop.ini
 *.docx
 *.pptx
 *.pdf
+*.png
+*.jpg
+*.jpeg
+
+# ── Presentation / utility scripts (not part of core project) ────────────────
+generate_ppt.py
+generate_chapter5.py
+insert_chapter76.py
+generate_script_doc.py
+demo_anomaly.py
+demo_fingerprinting.py
+Chapter4_Implementation.txt
+Chapter5_System_Demonstration.txt
+slide_previews/
+dashboard\ screenshot/
+"D\357\200\272IoT_Device_Fingerprinting_Frameworkgenerate_ppt.py"
 
 # ── pytest cache ─────────────────────────────────────────────────────────────
 .pytest_cache/

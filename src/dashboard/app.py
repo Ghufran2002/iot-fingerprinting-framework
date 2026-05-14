@@ -3,6 +3,7 @@ Real-time Plotly Dash monitoring dashboard — Port 8050
 Auto-refreshes every 5 seconds from the FastAPI backend (port 8000).
 Includes SHAP Explainability panel showing live feature contributions.
 """
+import os
 import time
 import random
 import requests
@@ -11,7 +12,7 @@ import numpy as np
 import plotly.graph_objects as go
 from dash import Dash, html, dcc, Input, Output, callback
 
-API_BASE            = "http://127.0.0.1:8000"
+API_BASE            = os.environ.get("API_BASE", "http://127.0.0.1:8000")
 REFRESH_INTERVAL_MS = 5000
 
 DEVICE_COLORS = {
@@ -550,4 +551,5 @@ def refresh(n):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, port=8050, host="0.0.0.0")
+    port = int(os.environ.get("PORT", 8050))
+    app.run(debug=False, port=port, host="0.0.0.0")

@@ -1,0 +1,20 @@
+services:
+  # ── Service 1: FastAPI Backend (Fingerprinting + Anomaly Detection API) ──
+  - type: web
+    name: iot-fingerprinting-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python train.py
+    startCommand: uvicorn src.api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+
+  # ── Service 2: Plotly Dash Dashboard ──
+  - type: web
+    name: iot-fingerprinting-dashboard
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m src.dashboard.app
+    envVars:
+      - key: API_BASE
+        sync: false
