@@ -192,13 +192,41 @@ app.layout = html.Div(
 
         # ── Live API Detection Feed ──────────────────────────────────────────
         html.Div(
-            style={'margin': '0 30px 20px'},
+            style={
+                'margin': '0 30px 20px',
+                'backgroundColor': '#1A1F2E',
+                'border': '1px solid #1f2535',
+                'borderRadius': '10px',
+                'padding': '20px 24px',
+            },
             children=[
-                html.H3("Live API Detection Feed",
-                        style={'color': '#90CAF9', 'margin': '0 0 12px',
-                               'fontSize': '16px', 'fontWeight': '600'}),
+                html.Div(
+                    style={'display': 'flex', 'alignItems': 'center',
+                           'gap': '12px', 'marginBottom': '14px'},
+                    children=[
+                        html.Div(
+                            style={
+                                'background': 'linear-gradient(135deg, #4CAF50, #00BCD4)',
+                                'borderRadius': '6px', 'padding': '4px 10px',
+                                'fontSize': '11px', 'fontWeight': '700',
+                                'color': '#fff', 'letterSpacing': '1px',
+                            },
+                            children="LIVE API"
+                        ),
+                        html.H3(
+                            "Live API Detection Feed — Real-time Fingerprinting & Anomaly Results",
+                            style={'color': '#A5D6A7', 'margin': 0,
+                                   'fontSize': '16px', 'fontWeight': '600'}
+                        ),
+                    ]
+                ),
+                html.P(
+                    "Each card shows the actual output from the /analyze API endpoint — "
+                    "device fingerprint, anomaly score, severity, and model used. Refreshes every 5 seconds.",
+                    style={'color': '#6b7898', 'fontSize': '12px', 'marginBottom': '14px'}
+                ),
                 html.Div(id='detection-feed',
-                         style={'display': 'flex', 'gap': '16px', 'flexWrap': 'wrap'}),
+                         style={'display': 'flex', 'gap': '14px', 'flexWrap': 'wrap'}),
             ]
         ),
 
