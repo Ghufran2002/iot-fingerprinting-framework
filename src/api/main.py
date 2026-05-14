@@ -181,6 +181,102 @@ def health():
     }
 
 
+@app.get("/status", include_in_schema=False)
+def status_page():
+    uptime_s = round(time.time() - _state["start_time"], 1)
+    h = int(uptime_s // 3600)
+    m = int((uptime_s % 3600) // 60)
+    s = int(uptime_s % 60)
+    uptime_fmt = f"{h:02d}:{m:02d}:{s:02d}"
+    models_ok = _state["models_loaded"]
+    shap_ok   = _state["shap_explainer"] is not None
+    req_count = _state["request_count"]
+
+    def _row(label, value, ok=True):
+        color  = "#00ff88" if ok else "#ff4757"
+        icon   = "✔" if ok else "✘"
+        return f"""
+        <div class="row">
+          <span class="label">{label}</span>
+          <span class="value" style="color:{color}">{icon}&nbsp;&nbsp;{value}</span>
+        </div>"""
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta http-equiv="refresh" content="10"/>
+  <title>API Status — IoT Fingerprinting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap"/>
+  <style>
+    *{{box-sizing:border-box;margin:0;padding:0}}
+    body{{background:#0d0f14;color:#c9d1e0;font-family:'JetBrains Mono',monospace;
+          min-height:100vh;display:flex;flex-direction:column;align-items:center;
+          justify-content:center;padding:30px 16px}}
+    .card{{background:#13161e;border:1px solid #1f2535;border-radius:14px;
+           width:100%;max-width:540px;overflow:hidden;
+           box-shadow:0 0 40px rgba(0,245,255,.07)}}
+    .header{{background:linear-gradient(90deg,#0d1b2a,#1a1e28);
+             border-bottom:1px solid #1f2535;padding:22px 28px}}
+    .badge{{display:inline-block;padding:3px 10px;border-radius:20px;
+            font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:10px;
+            background:rgba(0,255,136,.1);border:1px solid #00ff88;color:#00ff88}}
+    .badge.down{{background:rgba(255,71,87,.1);border-color:#ff4757;color:#ff4757}}
+    h1{{font-size:16px;font-weight:700;
+        background:linear-gradient(90deg,#00f5ff,#b06aff);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        background-clip:text;letter-spacing:.4px}}
+    .sub{{font-size:11px;color:#6b7898;margin-top:4px}}
+    .body{{padding:24px 28px;display:flex;flex-direction:column;gap:14px}}
+    .row{{display:flex;justify-content:space-between;align-items:center;
+          padding:12px 16px;background:#0d0f14;border-radius:8px;
+          border:1px solid #1f2535}}
+    .label{{font-size:12px;color:#6b7898;text-transform:uppercase;letter-spacing:.8px}}
+    .value{{font-size:13px;font-weight:600}}
+    .kpi-row{{display:flex;gap:10px}}
+    .kpi{{flex:1;background:#0d0f14;border:1px solid #1f2535;border-radius:8px;
+           padding:12px;text-align:center}}
+    .kpi .num{{font-size:22px;font-weight:700;color:#00f5ff}}
+    .kpi .lbl{{font-size:10px;color:#6b7898;text-transform:uppercase;
+               letter-spacing:.8px;margin-top:3px}}
+    .footer{{padding:14px 28px;border-top:1px solid #1f2535;
+             font-size:10px;color:#6b7898;text-align:center}}
+    body::before{{content:'';position:fixed;inset:0;pointer-events:none;
+                  background:repeating-linear-gradient(0deg,transparent,transparent 2px,
+                  rgba(0,245,255,.012) 2px,rgba(0,245,255,.012) 4px)}}
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="badge {'badge' if models_ok else 'badge down'}">
+      {'● ONLINE' if models_ok else '● DEGRADED'}
+    </div>
+    <h1>IoT Fingerprinting — API Status</h1>
+    <div class="sub">M.Tech Cyber Forensics &nbsp;|&nbsp; NIELIT Srinagar &nbsp;|&nbsp; Md Ghufran Alam</div>
+  </div>
+  <div class="body">
+    <div class="kpi-row">
+      <div class="kpi"><div class="num">8</div><div class="lbl">Devices</div></div>
+      <div class="kpi"><div class="num">37</div><div class="lbl">Features</div></div>
+      <div class="kpi"><div class="num" style="color:#b06aff">{req_count}</div><div class="lbl">Requests</div></div>
+      <div class="kpi"><div class="num" style="color:#ffcd43">{uptime_fmt}</div><div class="lbl">Uptime</div></div>
+    </div>
+    {_row("API Server",     "Running &nbsp;/ &nbsp;FastAPI v0.104+", True)}
+    {_row("ML Models",      "Loaded — Random Forest + IForest + OC-SVM" if models_ok else "Not Loaded — Run train.py", models_ok)}
+    {_row("SHAP Explainer", "TreeExplainer Ready" if shap_ok else "Not Available", shap_ok)}
+    {_row("Dashboard",      "Mounted at /dashboard/", True)}
+    {_row("API Docs",       "Available at /docs", True)}
+  </div>
+  <div class="footer">Auto-refreshes every 10 seconds &nbsp;|&nbsp; JSON: <a href="/health" style="color:#00b8c8">/health</a></div>
+</div>
+</body>
+</html>"""
+    return HTMLResponse(html_content)
+
+
 @app.get("/devices", tags=["System"])
 def list_devices():
     descriptions = {
