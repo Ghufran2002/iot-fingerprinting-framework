@@ -561,7 +561,7 @@ bullet_box(s, endpoints, 0.4, 5.92, 9.0, 1.3, size=13, color=LGRAY, indent="  ")
 
 rect(s, 9.5, 5.5, 3.5, 1.7, RGBColor(0x00, 0x30, 0x10))
 box(s, "Performance", 9.6, 5.55, 3.3, 0.4, size=14, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
-perf = ["API latency: 37 ms", "Uptime: 2.1+ hours", "106 requests served", "100% detection rate"]
+perf = ["API latency: ~40 ms", "Status: Live & Healthy", "Models: RF + IF + OC-SVM", "Accuracy: 100% (8 devices)"]
 bullet_box(s, perf, 9.6, 5.98, 3.3, 1.1, size=13, color=WHITE)
 
 # ─────────────────────────────────────────────
