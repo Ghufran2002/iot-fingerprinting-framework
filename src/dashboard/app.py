@@ -260,9 +260,9 @@ def _api_get(endpoint, fallback=None):
         return fallback
 
 
-def _api_post(endpoint, data=None):
+def _api_post(endpoint, data=None, timeout=30):
     try:
-        r = requests.post(f"{API_BASE}{endpoint}", json=data, timeout=4)
+        r = requests.post(f"{API_BASE}{endpoint}", json=data, timeout=timeout)
         return r.json() if r.status_code == 200 else None
     except Exception:
         return None
@@ -406,12 +406,14 @@ def refresh(n):
         marker_color=[SEVERITY_COLORS[k] for k in sev_counts],
         text=list(sev_counts.values()),
         textposition='outside',
+        textfont=dict(color='#E0E0E0'),
     ))
     fig_sev.update_layout(
         title='Alerts by Severity', paper_bgcolor='#1A1F2E',
         plot_bgcolor='#12161F', font_color='#E0E0E0',
         margin=dict(l=30, r=20, t=40, b=30), height=250,
-        yaxis_title='Count', showlegend=False,
+        yaxis=dict(title='Count', range=[0, max(max(sev_counts.values()) + 1, 5)]),
+        showlegend=False,
     )
 
     # ── Score Gauge ───────────────────────────────────────────────────────

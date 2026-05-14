@@ -22,8 +22,22 @@ def run_api():
     ], cwd=ROOT)
 
 
+def wait_for_api(timeout=120):
+    import urllib.request
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            urllib.request.urlopen("http://127.0.0.1:8000/health", timeout=3)
+            print("[hf_run] API is ready.")
+            return True
+        except Exception:
+            time.sleep(3)
+    print("[hf_run] WARNING: API did not become ready in time, starting dashboard anyway.")
+    return False
+
+
 def run_dashboard():
-    time.sleep(5)
+    wait_for_api()
     os.environ["PORT"] = "7860"
     subprocess.run([sys.executable, "-m", "src.dashboard.app"], cwd=ROOT)
 

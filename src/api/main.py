@@ -319,12 +319,21 @@ def explain(flow: FlowFeatures):
     sv     = _state["shap_explainer"].shap_values(X)
     sv_arr = np.array(sv)
 
-    # Normalize shape → (n_classes, n_samples, n_features)
-    # SHAP >= 0.40 returns (n_samples, n_features, n_classes) for multi-class RF
-    if sv_arr.ndim == 3 and sv_arr.shape[0] == len(X):
-        sv_arr = sv_arr.transpose(2, 0, 1)
+    # Handle all SHAP return shapes for multi-class RandomForest:
+    # - list of (n_samples, n_features) per class  → after np.array: (n_classes, n_samples, n_features)
+    # - (n_samples, n_features, n_classes)          → transpose to (n_classes, n_samples, n_features)
+    # - (n_samples, n_features)                     → single-class fallback
+    if sv_arr.ndim == 3:
+        if sv_arr.shape[0] == len(DEVICE_TYPES):
+            pass  # already (n_classes, n_samples, n_features)
+        elif sv_arr.shape[2] == len(DEVICE_TYPES):
+            sv_arr = sv_arr.transpose(2, 0, 1)
+        elif sv_arr.shape[0] == len(X):
+            sv_arr = sv_arr.transpose(2, 0, 1)
+    elif sv_arr.ndim == 2:
+        sv_arr = sv_arr[np.newaxis, :, :]  # treat as single class
 
-    class_idx = DEVICE_TYPES.index(effective_device)
+    class_idx = min(DEVICE_TYPES.index(effective_device), sv_arr.shape[0] - 1)
     sv_class  = sv_arr[class_idx, 0]   # (n_features,)
 
     top_idx = np.argsort(np.abs(sv_class))[::-1][:10]
