@@ -51,7 +51,13 @@ desktop.ini
 *.jpg
 *.jpeg
 
-# ── Presentation / utility scripts (not part of core project) ────────────────
+# ── Generated outputs (recreated by train.py) ────────────────────────────────
+plots/
+data/iot_flows.csv
+data/iot_flows_synthetic.csv
+dashboard_screenshots/
+
+# ── Presentation / paper / utility scripts ───────────────────────────────────
 generate_ppt.py
 generate_chapter5.py
 insert_chapter76.py
@@ -61,8 +67,12 @@ demo_fingerprinting.py
 Chapter4_Implementation.txt
 Chapter5_System_Demonstration.txt
 slide_previews/
-dashboard\ screenshot/
-"D\357\200\272IoT_Device_Fingerprinting_Frameworkgenerate_ppt.py"
+paper/
+*.zip
+DISSERTATION_REPORT.md
+PANEL_DEMO_GUIDE.md
+PRESENTATION_SCRIPT.md
+PROJECT_GUIDE.md
 
 # ── pytest cache ─────────────────────────────────────────────────────────────
 .pytest_cache/
