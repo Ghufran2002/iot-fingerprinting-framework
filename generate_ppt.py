@@ -102,6 +102,12 @@ if os.path.exists(LOGO):
     s.shapes.add_picture(LOGO, Inches(0.2),  Inches(0.12), Inches(1.9), Inches(0.8))
     s.shapes.add_picture(LOGO, Inches(11.23), Inches(0.12), Inches(1.9), Inches(0.8))
 
+# Institute name between logos
+box(s, "NATIONAL INSTITUTE OF ELECTRONICS AND INFORMATION TECHNOLOGY, SRINAGAR",
+    2.2, 0.18, 8.9, 0.45, size=13, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
+box(s, "Ministry of Electronics & Information Technology, Govt. of India",
+    2.2, 0.60, 8.9, 0.35, size=10, bold=False, color=LGRAY, align=PP_ALIGN.CENTER)
+
 box(s, "IoT Device Fingerprinting &", 0.5, 1.0, 12.3, 1.2,
     size=36, bold=True, color=ACCENT, align=PP_ALIGN.CENTER)
 box(s, "Anomaly Detection Framework", 0.5, 1.9, 12.3, 1.0,
@@ -116,7 +122,7 @@ box(s, "Md Ghufran Alam  |  Roll No. NDU202400038",
     0.5, 4.3, 12.3, 0.5, size=17, bold=True, color=YELLOW, align=PP_ALIGN.CENTER)
 box(s, "M.Tech Cyber Forensics  |  NIELIT Srinagar  |  2024–2026",
     0.5, 4.85, 12.3, 0.5, size=15, color=LGRAY, align=PP_ALIGN.CENTER)
-box(s, "Supervised by:  Dr. Nisar Hussain Bukhari",
+box(s, "Supervised by:  Dr. Syed Nisar Hussain Bukhari",
     0.5, 5.38, 12.3, 0.45, size=15, color=LGRAY, align=PP_ALIGN.CENTER)
 
 rect(s, 2.5, 5.98, 8.33, 0.6, RGBColor(0x00, 0x40, 0x60))
