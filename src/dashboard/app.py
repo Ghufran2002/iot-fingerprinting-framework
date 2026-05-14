@@ -12,7 +12,9 @@ import numpy as np
 import plotly.graph_objects as go
 from dash import Dash, html, dcc, Input, Output, callback
 
-API_BASE            = os.environ.get("API_BASE", "http://127.0.0.1:8000")
+_PORT    = os.environ.get("PORT", "7860")
+API_BASE = os.environ.get("API_BASE", f"http://127.0.0.1:{_PORT}")
+_PREFIX  = os.environ.get("DASH_PREFIX", "/dashboard/")
 REFRESH_INTERVAL_MS = 5000
 
 DEVICE_COLORS = {
@@ -131,7 +133,9 @@ def _build_device_flow(device: str) -> dict:
 # ---------------------------------------------------------------------------
 # App
 # ---------------------------------------------------------------------------
-app = Dash(__name__, title="IoT Security Monitor")
+app = Dash(__name__, title="IoT Security Monitor",
+           requests_pathname_prefix=_PREFIX,
+           routes_pathname_prefix=_PREFIX)
 
 app.layout = html.Div(
     style={'backgroundColor': '#0F1117', 'minHeight': '100vh',

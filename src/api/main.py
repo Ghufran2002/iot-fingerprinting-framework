@@ -707,3 +707,13 @@ _DOCS_HTML = """<!DOCTYPE html>
 @app.get("/docs", include_in_schema=False)
 def custom_docs():
     return HTMLResponse(_DOCS_HTML)
+
+
+# ── Mount Dash dashboard at /dashboard ──────────────────────────────────────
+try:
+    from starlette.middleware.wsgi import WSGIMiddleware
+    from src.dashboard.app import app as _dash_app
+    app.mount("/dashboard", WSGIMiddleware(_dash_app.server))
+    logger.info("Dash dashboard mounted at /dashboard")
+except Exception as _e:
+    logger.warning(f"Dashboard mount skipped: {_e}")
