@@ -7,9 +7,22 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![Dataset](https://img.shields.io/badge/Dataset-N--BaIoT_UCI-red?style=flat-square)](https://archive.ics.uci.edu/dataset/442)
 [![Accuracy](https://img.shields.io/badge/Fingerprinting_Accuracy-100%25-brightgreen?style=flat-square)]()
+[![HuggingFace](https://img.shields.io/badge/🤗_HuggingFace-Live_Demo-yellow?style=flat-square)](https://mdghufran-iot-fingerprinting.hf.space)
 
 > **M.Tech Cyber Forensics — Final Semester Thesis**  
 > NIELIT Srinagar &nbsp;|&nbsp; Md Ghufran Alam &nbsp;|&nbsp; Roll No. NDU202400038
+
+## Live Deployment
+
+| | URL |
+|---|---|
+| **Live Dashboard** | https://mdghufran-iot-fingerprinting.hf.space |
+| **API Docs** | https://mdghufran-iot-fingerprinting.hf.space/docs |
+| **API Health** | https://mdghufran-iot-fingerprinting.hf.space/status |
+| **HuggingFace Space** | https://huggingface.co/spaces/mdghufran/iot-fingerprinting |
+| **LinkedIn Post** | https://www.linkedin.com/feed/update/urn:li:activity:7460802322206650368/ |
+
+> Deployed on HuggingFace Spaces (Docker) — fully live, no local setup required.
 
 A **production-grade** machine learning system that **fingerprints IoT devices** by their network traffic signature and **detects Mirai / BASHLITE botnet attacks in real time** — without installing anything on the devices themselves.
 
