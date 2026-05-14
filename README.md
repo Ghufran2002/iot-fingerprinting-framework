@@ -1,3 +1,12 @@
+---
+title: IoT Device Fingerprinting
+emoji: 📡
+colorFrom: blue
+colorTo: cyan
+sdk: docker
+pinned: false
+---
+
 # IoT Device Fingerprinting & Anomaly Detection Framework
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
