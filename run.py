@@ -7,6 +7,7 @@ Then open: http://127.0.0.1:8050  (Dashboard)
 import sys
 import time
 import subprocess
+import webbrowser
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -42,6 +43,12 @@ def main():
         [sys.executable, "-m", "src.dashboard.app"],
         cwd=ROOT,
     )
+
+    time.sleep(3)
+    print("\n[3/3] Opening browser ...")
+    webbrowser.open("http://127.0.0.1:8050")
+    time.sleep(1)
+    webbrowser.open("http://127.0.0.1:8000/docs")
 
     print("\n" + "=" * 60)
     print("  Dashboard:  http://127.0.0.1:8050")
