@@ -190,6 +190,18 @@ app.layout = html.Div(
             ]
         ),
 
+        # ── Live API Detection Feed ──────────────────────────────────────────
+        html.Div(
+            style={'margin': '0 30px 20px'},
+            children=[
+                html.H3("Live API Detection Feed",
+                        style={'color': '#90CAF9', 'margin': '0 0 12px',
+                               'fontSize': '16px', 'fontWeight': '600'}),
+                html.Div(id='detection-feed',
+                         style={'display': 'flex', 'gap': '16px', 'flexWrap': 'wrap'}),
+            ]
+        ),
+
         # ── SHAP Explainability Panel ────────────────────────────────────────
         html.Div(
             style={
@@ -303,6 +315,7 @@ def _shap_placeholder(message: str) -> go.Figure:
     Output('severity-bar',    'figure'),
     Output('score-gauge',     'figure'),
     Output('alerts-table',    'children'),
+    Output('detection-feed',  'children'),
     Output('shap-bar',        'figure'),
     Input('interval',         'n_intervals'),
 )
@@ -480,8 +493,57 @@ def refresh(n):
                    'backgroundColor': '#1A1F2E', 'borderRadius': '8px', 'fontSize': '13px'},
         )
 
+    # ── Live API Detection Feed ───────────────────────────────────────────
+    device_flow   = _build_device_flow(device)
+    analyze_data  = _api_post("/analyze", {"features": device_flow}, timeout=10)
+    fp_result     = analyze_data.get("fingerprint", {}) if analyze_data else {}
+    anom_result   = analyze_data.get("anomaly", {})     if analyze_data else {}
+
+    detected_device = fp_result.get("device_type", device)
+    confidence      = fp_result.get("confidence", 0.0)
+    anom_score      = anom_result.get("anomaly_score", score)
+    is_anom_api     = anom_result.get("is_anomalous", is_alert)
+    severity_api    = anom_result.get("severity") or ("NORMAL" if not is_anom_api else "LOW")
+    api_src_ip      = analyze_data.get("source_ip", "—") if analyze_data else "—"
+
+    def _det_card(label, value, color="#90CAF9", sub=""):
+        return html.Div(
+            style={
+                'backgroundColor': '#1A1F2E', 'border': f'1px solid {color}',
+                'borderRadius': '8px', 'padding': '14px 18px', 'minWidth': '160px', 'flex': '1',
+            },
+            children=[
+                html.P(label, style={'margin': '0 0 4px', 'fontSize': '11px',
+                                     'color': '#90A4AE', 'textTransform': 'uppercase',
+                                     'letterSpacing': '1px'}),
+                html.H3(value, style={'margin': 0, 'fontSize': '20px',
+                                      'fontWeight': '700', 'color': color}),
+                html.P(sub, style={'margin': '3px 0 0', 'fontSize': '11px', 'color': '#607D8B'}),
+            ]
+        )
+
+    sev_color_map = {
+        'NORMAL': '#4CAF50', 'LOW': '#4CAF50',
+        'MEDIUM': '#FF9800', 'HIGH': '#F44336', 'CRITICAL': '#9C27B0',
+    }
+    det_label = detected_device.replace('smart_', '').replace('_', ' ').title()
+    det_color = DEVICE_COLORS.get(detected_device, '#90CAF9')
+    api_status_color = '#4CAF50' if analyze_data else '#EF9A9A'
+    api_status_text  = 'CONNECTED' if analyze_data else 'OFFLINE'
+
+    detection_feed = [
+        _det_card("API Status",        api_status_text,               api_status_color, "FastAPI backend"),
+        _det_card("Detected Device",   det_label,                     det_color,        f"Confidence: {confidence:.0%}"),
+        _det_card("Anomaly Score",     f"{anom_score:.3f}",
+                  '#F44336' if is_anom_api else '#4CAF50',            f"Threshold: 0.75"),
+        _det_card("Severity",          severity_api,
+                  sev_color_map.get(severity_api, '#9E9E9E'),         "Current flow"),
+        _det_card("Source IP",         api_src_ip,                    '#90CAF9',         "Simulated flow"),
+        _det_card("Model",             fp_result.get("model_used", "random_forest").replace("_", " ").title(),
+                  '#9C27B0',                                           "Fingerprinter"),
+    ]
+
     # ── SHAP Explainability Bar ───────────────────────────────────────────
-    device_flow  = _build_device_flow(device)
     explain_data = _api_post("/explain", device_flow)
 
     if explain_data and "explanation" in explain_data:
@@ -549,7 +611,7 @@ def refresh(n):
             "SHAP data unavailable — ensure API is running with models loaded (run train.py)"
         )
 
-    return status_el, kpis, fig_timeline, fig_pie, fig_sev, fig_gauge, table, fig_shap
+    return status_el, kpis, fig_timeline, fig_pie, fig_sev, fig_gauge, table, detection_feed, fig_shap
 
 
 if __name__ == "__main__":
