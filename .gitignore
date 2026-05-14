@@ -58,10 +58,14 @@ data/iot_flows_synthetic.csv
 dashboard_screenshots/
 
 # ── Presentation / paper / utility scripts ───────────────────────────────────
+generate_ppt.py
 generate_chapter5.py
 insert_chapter76.py
 generate_script_doc.py
+demo_anomaly.py
+demo_fingerprinting.py
 Chapter4_Implementation.txt
+Chapter5_System_Demonstration.txt
 slide_previews/
 paper/
 *.zip
