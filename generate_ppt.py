@@ -9,6 +9,12 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Inches, Pt
 import os
+import io
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import numpy as np
 
 OUT_FILE = "IoT_Fingerprinting_Presentation_FINAL.pptx"
 
@@ -464,6 +470,46 @@ demo_stats = [
 bullet_box(s, demo_stats, 9.1, 1.6, 3.8, 5.5, size=13, color=WHITE)
 
 # ─────────────────────────────────────────────
+# SHAP bar chart (generated in-memory)
+# ─────────────────────────────────────────────
+_shap_features = [
+    ("max_pkt_size",          +0.04),
+    ("is_mqtt",               +0.07),
+    ("syn_ratio",             +0.08),
+    ("well_known_port_ratio", -0.05),
+    ("is_encrypted",          -0.06),
+    ("mean_dest_port",        -0.09),
+    ("is_https",              -0.10),
+    ("ack_ratio",             -0.12),
+    ("udp_ratio",             -0.15),
+    ("tcp_ratio",             -0.18),
+]
+_feat_names = [f[0] for f in _shap_features]
+_shap_vals  = [f[1] for f in _shap_features]
+_colors     = ['#00FF88' if v > 0 else '#FF5555' for v in _shap_vals]
+
+fig, ax = plt.subplots(figsize=(5.5, 3.6), facecolor='#0D1B2A')
+ax.set_facecolor('#0D1B2A')
+bars = ax.barh(_feat_names, _shap_vals, color=_colors, height=0.6, edgecolor='none')
+ax.axvline(0, color='#AAAAAA', linewidth=0.8)
+ax.set_xlabel('SHAP Value (impact on prediction)', color='#CCCCCC', fontsize=9)
+ax.set_title('Unknown Device — 46% confidence', color='#00D4FF', fontsize=10, fontweight='bold')
+ax.tick_params(colors='#CCCCCC', labelsize=8)
+for spine in ax.spines.values():
+    spine.set_edgecolor('#333333')
+ax.xaxis.label.set_color('#CCCCCC')
+green_patch = mpatches.Patch(color='#00FF88', label='Toward (supports class)')
+red_patch   = mpatches.Patch(color='#FF5555', label='Away (reduces confidence)')
+ax.legend(handles=[green_patch, red_patch], facecolor='#0D1B2A',
+          labelcolor='#CCCCCC', fontsize=7, loc='lower right')
+plt.tight_layout(pad=0.4)
+
+_shap_buf = io.BytesIO()
+fig.savefig(_shap_buf, format='png', dpi=150, facecolor='#0D1B2A')
+plt.close(fig)
+_shap_buf.seek(0)
+
+# ─────────────────────────────────────────────
 # SLIDE 8 — SHAP Explainability
 # ─────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK)
@@ -509,9 +555,12 @@ for feat, direction, interp in shap_features:
         size=12, color=color)
     y += 0.31
 
-# Right note
-rect(s, 9.2, 1.05, 3.8, 2.5, RGBColor(0x05, 0x05, 0x20))
-box(s, "SHAP Implementation", 9.3, 1.1, 3.6, 0.4, size=14, bold=True, color=ACCENT, align=PP_ALIGN.CENTER)
+# SHAP bar chart — right side
+pic = s.shapes.add_picture(_shap_buf, Inches(8.6), Inches(1.0), Inches(4.5), Inches(3.2))
+
+# Implementation box below chart
+rect(s, 8.6, 4.3, 4.5, 2.8, RGBColor(0x05, 0x05, 0x20))
+box(s, "SHAP Implementation", 8.7, 4.35, 4.3, 0.4, size=13, bold=True, color=ACCENT, align=PP_ALIGN.CENTER)
 shap_impl = [
     "TreeExplainer (faster than KernelExplainer)",
     "Runs on Random Forest model",
@@ -520,7 +569,7 @@ shap_impl = [
     "Updates every prediction",
     "Sub-30ms response time",
 ]
-bullet_box(s, shap_impl, 9.3, 1.55, 3.6, 1.9, size=12, color=LGRAY)
+bullet_box(s, shap_impl, 8.7, 4.78, 4.3, 2.2, size=12, color=LGRAY)
 
 # ─────────────────────────────────────────────
 # SLIDE 9 — Live Deployment
