@@ -491,7 +491,62 @@ def metrics():
 
 @app.get("/", include_in_schema=False)
 def root():
-    return RedirectResponse(url="/dashboard/")
+    html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>IoT Fingerprinting Framework</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0d1b2a;color:#e0e0e0;font-family:'Segoe UI',sans-serif;
+         min-height:100vh;display:flex;flex-direction:column;align-items:center;
+         justify-content:center;padding:40px 20px}
+    h1{font-size:28px;font-weight:700;color:#00d4ff;text-align:center;margin-bottom:8px}
+    p{color:#90a4ae;font-size:14px;text-align:center;margin-bottom:32px}
+    .grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;max-width:700px}
+    a.card{display:block;background:#13161e;border:1px solid #1f3050;border-radius:12px;
+           padding:22px 28px;width:200px;text-decoration:none;transition:border-color .2s}
+    a.card:hover{border-color:#00d4ff}
+    a.card .icon{font-size:28px;margin-bottom:10px}
+    a.card .title{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px}
+    a.card .desc{font-size:12px;color:#607d8b}
+    .badge{background:rgba(0,212,255,.1);border:1px solid #00d4ff;color:#00d4ff;
+           font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;
+           display:inline-block;margin-bottom:16px;letter-spacing:1px}
+    .sub{font-size:12px;color:#546e7a;text-align:center;margin-top:28px}
+  </style>
+</head>
+<body>
+  <div class="badge">● LIVE SYSTEM</div>
+  <h1>IoT Device Fingerprinting &amp; Anomaly Detection</h1>
+  <p>M.Tech Cyber Forensics &nbsp;|&nbsp; NIELIT Srinagar &nbsp;|&nbsp; Md Ghufran Alam (NDU202400038)</p>
+  <div class="grid">
+    <a class="card" href="/dashboard/">
+      <div class="icon">📊</div>
+      <div class="title">Live Dashboard</div>
+      <div class="desc">Real-time anomaly monitoring &amp; SHAP panel</div>
+    </a>
+    <a class="card" href="/docs">
+      <div class="icon">📡</div>
+      <div class="title">API Docs</div>
+      <div class="desc">Swagger UI — test all 8 endpoints live</div>
+    </a>
+    <a class="card" href="/status">
+      <div class="icon">🟢</div>
+      <div class="title">Status Page</div>
+      <div class="desc">System health, uptime &amp; model status</div>
+    </a>
+    <a class="card" href="/health">
+      <div class="icon">❤️</div>
+      <div class="title">Health JSON</div>
+      <div class="desc">Raw health check endpoint</div>
+    </a>
+  </div>
+  <div class="sub">GitHub: github.com/Ghufran2002/iot-fingerprinting-framework</div>
+</body>
+</html>"""
+    return HTMLResponse(html)
 
 
 @app.post("/demo/inject", tags=["Demo"])
