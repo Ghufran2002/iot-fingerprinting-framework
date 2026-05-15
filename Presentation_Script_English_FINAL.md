@@ -62,7 +62,7 @@ An ensemble of Isolation Forest and One-Class SVM decides whether the device is 
 For every prediction, the top 10 features that influenced the decision are explained — so a security analyst knows exactly why the model flagged something.
 
 **At the bottom:**
-All results go to an Alert Manager, a FastAPI REST API, and a Plotly Dash live dashboard.
+All results go to an Alert Manager, a FastAPI REST API, and a live HTML dashboard with real-time Plotly.js charts.
 
 Everything runs inside a single Docker container on one port."
 
@@ -187,7 +187,7 @@ This allows an analyst to verify the alert **in seconds instead of minutes.**
 - I used **TreeExplainer** — which is 10x faster than KernelExplainer for tree-based models
 - It runs on the Random Forest model
 - Available at the **POST /explain** endpoint
-- Also shown live in the Dash dashboard
+- Also shown live in the monitoring dashboard
 - Response time is **under 30 milliseconds**"
 
 ---
@@ -198,7 +198,7 @@ This allows an analyst to verify the alert **in seconds instead of minutes.**
 
 **Platform:** HuggingFace Spaces using Docker SDK — free tier, public visibility.
 
-**Architecture:** FastAPI and Plotly Dash both run on a **single port — 7860** — using WSGIMiddleware. This is important because HuggingFace Spaces exposes only one port.
+**Architecture:** FastAPI serves everything on a **single port — 7860** — including the REST API, live dashboard, and Swagger UI. This is important because HuggingFace Spaces exposes only one port.
 
 **Available URLs:**
 - Live Dashboard — main monitoring interface with real-time charts
@@ -274,7 +274,7 @@ A single API call automatically identified the device as a camera and detected t
 
 5. **REST API** — 8 FastAPI endpoints including the combined /analyze and /explain endpoints.
 
-6. **Dashboard** — Plotly Dash live monitoring with anomaly timeline, severity chart, and SHAP panel.
+6. **Dashboard** — Live HTML/Plotly.js monitoring dashboard with anomaly timeline, severity chart, and real-time alert feed.
 
 7. **Dataset** — Trained on real N-BaIoT data with real Mirai and BASHLITE attack traffic — not simulated.
 

@@ -12,7 +12,7 @@ pinned: false
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3%2B-orange?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104%2B-green?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Dash](https://img.shields.io/badge/Plotly_Dash-2.14%2B-blue?style=flat-square)](https://dash.plotly.com/)
+[![Plotly](https://img.shields.io/badge/Plotly.js-Live_Dashboard-blue?style=flat-square)](https://plotly.com/javascript/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![Dataset](https://img.shields.io/badge/Dataset-N--BaIoT_UCI-red?style=flat-square)](https://archive.ics.uci.edu/dataset/442)
 [![Accuracy](https://img.shields.io/badge/Fingerprinting_Accuracy-100%25-brightgreen?style=flat-square)]()
@@ -35,7 +35,7 @@ pinned: false
 
 A **production-grade** machine learning system that **fingerprints IoT devices** by their network traffic signature and **detects Mirai / BASHLITE botnet attacks in real time** — without installing anything on the devices themselves.
 
-Trained on the real **N-BaIoT dataset** (UCI ML Repository #442) featuring 9 physical IoT devices and live attack traffic. Delivers results through a **FastAPI REST interface** and a **live Plotly Dash dashboard**, with full **SHAP explainability** on every prediction.
+Trained on the real **N-BaIoT dataset** (UCI ML Repository #442) featuring 9 physical IoT devices and live attack traffic. Delivers results through a **FastAPI REST interface** and a **live Plotly.js monitoring dashboard**, with full **SHAP explainability** on every prediction.
 
 ---
 
@@ -149,8 +149,8 @@ Device Label             Anomaly Score
                │
     ┌──────────┴──────────┐
     ▼                     ▼
-FastAPI REST API     Plotly Dash
-(port 8000)          (port 8050)
+FastAPI REST API + Live Dashboard
+(single port 7860)
 ```
 
 ---
@@ -165,7 +165,7 @@ FastAPI REST API     Plotly Dash
 | 4 | **Per-Device Models** | Each device type gets its own dedicated anomaly detector |
 | 5 | **SHAP Explainability (XAI)** | Top-10 feature contributions shown for every prediction |
 | 6 | **REST API** | FastAPI + dark-themed Swagger UI on port 8000 |
-| 7 | **Live Dashboard** | Plotly Dash with real-time alert feed and charts on port 8050 |
+| 7 | **Live Dashboard** | Plotly.js dashboard with real-time alert feed and charts — served on port 7860 |
 | 8 | **SMOTE Balancing** | Handles class imbalance automatically during training |
 | 9 | **Alert Management** | Four severity levels — LOW / MEDIUM / HIGH / CRITICAL |
 
@@ -219,8 +219,9 @@ python run.py
 
 | Service | URL |
 |---|---|
-| REST API Docs | http://localhost:8000/docs |
-| Live Dashboard | http://localhost:8050 |
+| REST API Docs | http://localhost:7860/docs |
+| Live Dashboard | http://localhost:7860/dashboard/ |
+| Status Page | http://localhost:7860/status |
 
 ---
 
@@ -292,8 +293,7 @@ iot-fingerprinting-framework/
 │   ├── api/
 │   │   └── main.py             # FastAPI app with 8 endpoints + SHAP
 │   │
-│   ├── dashboard/
-│   │   └── app.py              # Plotly Dash live dashboard
+│   ├── dashboard/              # Live Plotly.js dashboard (served by FastAPI)
 │   │
 │   └── utils/
 │       ├── alert_manager.py    # Alert severity + deduplication
@@ -399,7 +399,7 @@ All plots are auto-saved to `plots/` after running `train.py`:
 | Class Balancing | imbalanced-learn (SMOTE) |
 | Explainability | SHAP (TreeExplainer) |
 | REST API | FastAPI + Pydantic + Uvicorn |
-| Dashboard | Plotly Dash |
+| Dashboard | Plotly.js (HTML/JS served by FastAPI) |
 | Model Persistence | joblib |
 | Logging | loguru |
 | Visualization | matplotlib + seaborn |

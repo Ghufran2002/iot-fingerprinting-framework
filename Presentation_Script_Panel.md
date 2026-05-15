@@ -68,7 +68,7 @@ Har prediction ke saath top-10 features explain hote hain — kaunsa feature ne 
 **Bottom layer** mein:
 - Alert Manager alerts generate karta hai
 - FastAPI REST API endpoints expose karta hai
-- Plotly Dash ka live dashboard hai monitoring ke liye
+- Live HTML dashboard hai monitoring ke liye — real-time Plotly.js charts ke saath
 
 **Sab kuch ek hi Docker container mein deploy hai — single port 7860 pe.**"
 
@@ -212,7 +212,7 @@ Yeh information ek security analyst ko **seconds mein** manually verify karne de
 
 **Platform:** HuggingFace Spaces — Docker SDK — publicly accessible, free tier pe.
 
-**Architecture:** FastAPI aur Plotly Dash dono **ek hi port pe** deploy hain — port 7860 — WSGIMiddleware ke zariye.
+**Architecture:** FastAPI **ek hi port pe** sab kuch serve karta hai — port 7860 — REST API, live dashboard, aur Swagger UI sab saath.
 
 **Available URLs:**
 - **Live Dashboard** — main monitoring interface
@@ -292,7 +292,7 @@ Is endpoint mein fingerprinting aur anomaly detection **ek hi API call** mein ho
 
 **5. REST API** — 8 FastAPI endpoints, fully documented Swagger UI.
 
-**6. Dashboard** — Plotly Dash live monitoring, anomaly timeline, SHAP panel.
+**6. Dashboard** — Live HTML/Plotly.js monitoring dashboard — anomaly timeline, severity chart, real-time alert feed.
 
 **7. Dataset** — Real N-BaIoT data, real Mirai aur BASHLITE attack traffic.
 

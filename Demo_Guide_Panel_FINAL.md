@@ -336,7 +336,7 @@ Md Ghufran Alam | NDU202400038 | NIELIT Srinagar
 - Recent alerts table
 - SHAP feature importance panel
 
-**What to say:** *"This is the live monitoring dashboard built with Plotly Dash. All the API calls we just made are reflected here as alerts in real time."*
+**What to say:** *"This is the live monitoring dashboard. All the API calls we just made are reflected here as alerts in real time — anomaly timeline, severity chart, and the full alert feed."*
 
 ---
 
