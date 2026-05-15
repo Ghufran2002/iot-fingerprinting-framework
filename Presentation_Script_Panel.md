@@ -180,6 +180,7 @@ Hamara model **sirf normal traffic pe trained hai** — usne kabhi attack traffi
 
 ## SLIDE 8 — SHAP Explainability
 *(XAI ka importance samjhao — yeh differentiator hai)*
+*(Right side pe SHAP bar chart embedded hai slide mein — uski taraf point karo)*
 
 "Ab ek aur important contribution — **SHAP Explainability**, yaani Explainable AI.
 
@@ -189,18 +190,21 @@ Jawab simple hai: ek black-box alert jo sirf bolta hai 'anomaly detected' — ek
 
 SHAP — SHapley Additive exPlanations — har prediction ke liye bataata hai ki kaunsa feature ne decision ko kitna influence kiya aur kaunsi direction mein.
 
-Slide pe example dikh raha hai — ek **Unknown device** jo sirf 46% confidence pe tha:
-- **tcp_ratio** — Red — matlab model se door le ja raha hai — high TCP usage is device profile se match nahi karta
-- **udp_ratio** — Red — UDP ratio too high
-- **is_mqtt** — Green — MQTT traffic partially support kar raha hai classification ko
-- **mean_dest_port** — Red — port profile kisi bhi known device se match nahi karta
+*(Right side bar chart ki taraf point karo)*
+Slide pe bar chart dikh raha hai — ek **Unknown device** jo sirf 46% confidence pe tha:
+- **tcp_ratio** — Red bar — matlab model se door le ja raha hai — high TCP usage is device profile se match nahi karta
+- **udp_ratio** — Red bar — UDP ratio too high
+- **is_mqtt** — Green bar — MQTT traffic partially support kar raha hai classification ko
+- **mean_dest_port** — Red bar — port profile kisi bhi known device se match nahi karta
+
+Green bars push karte hain prediction ko, Red bars pull karte hain door — ek glance mein sab clear.
 
 Yeh information ek security analyst ko **seconds mein** manually verify karne deti hai.
 
 **Implementation mein:**
 - TreeExplainer use kiya — jo KernelExplainer se 10x fast hai
 - POST /explain endpoint available hai
-- Dashboard mein live SHAP panel hai
+- Dashboard mein live SHAP panel bhi hai
 - Response time **30ms se kam** hai"
 
 ---
@@ -234,8 +238,11 @@ Yeh information ek security analyst ko **seconds mein** manually verify karne de
 
 ## SLIDE 10 — Demo: Device Fingerprinting
 *(Calmly explain karo — yeh impressive slide hai)*
+*(Slide ke bottom mein green banner hai — "Try live: .../docs → POST /fingerprint" — uski taraf point karo)*
 
 "Is slide mein fingerprinting ka simulated demo hai — 8 devices ko network traffic se identify karte hue.
+
+*(Bottom banner point karo)* "Aur yeh sirf simulation nahi — slide ke niche URL dikh raha hai — aap live Swagger UI pe jaake POST /fingerprint khud try kar sakte hain abhi."
 
 Dekho — **koi device access nahi, koi login nahi, koi agent nahi**:
 
@@ -254,8 +261,11 @@ Dekho — **koi device access nahi, koi login nahi, koi agent nahi**:
 
 ## SLIDE 11 — Demo: Anomaly Detection
 *(Yahan attack scenarios clearly explain karo)*
+*(Slide ke bottom mein green banner hai — "Try live: .../docs → POST /anomaly/score & POST /analyze" — uski taraf point karo)*
 
 "Anomaly detection ka demo — 4 test cases:
+
+*(Bottom banner point karo)* "Yeh bhi live test kar sakte hain — POST /anomaly/score aur POST /analyze dono endpoints Swagger pe available hain."
 
 **Test 1 — Normal Camera Traffic:**
 Score: **0.0000 — NORMAL**
