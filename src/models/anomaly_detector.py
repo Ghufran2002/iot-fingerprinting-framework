@@ -53,11 +53,13 @@ class PerDeviceDetector:
         # Fit normalization bounds: normal data scores should cluster near 0
         if_train = -self.if_model.decision_function(X_normal)
         oc_train = -self.ocsvm_model.decision_function(X_normal)
-        # Use [p5, p95+margin] so anomalies map above 0.75
-        self._if_lo   = float(np.percentile(if_train, 5))
-        self._if_hi   = float(np.percentile(if_train, 95) * 2.0)
-        self._ocsvm_lo = float(np.percentile(oc_train, 5))
-        self._ocsvm_hi = float(np.percentile(oc_train, 95) * 2.0)
+        if_p5,  if_p95  = float(np.percentile(if_train, 5)),  float(np.percentile(if_train, 95))
+        oc_p5,  oc_p95  = float(np.percentile(oc_train, 5)),  float(np.percentile(oc_train, 95))
+        # Extend hi ABOVE p95 by the training range — works for both positive and negative p95
+        self._if_lo    = if_p5
+        self._if_hi    = if_p95 + max(if_p95 - if_p5, 0.05)
+        self._ocsvm_lo = oc_p5
+        self._ocsvm_hi = oc_p95 + max(oc_p95 - oc_p5, 0.05)
         self._trained = True
 
     def score(self, X: np.ndarray) -> np.ndarray:
