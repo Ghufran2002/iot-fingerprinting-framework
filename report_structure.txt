@@ -1,0 +1,641 @@
+﻿[0][Heading 1] DISSERTATION REPORT
+[2][Heading 2] DESIGN OF A FRAMEWORK FOR IoT DEVICE FINGERPRINTING AND ANOMALY DETECTION FOR SMART HOME USING MACHINE LEARNING
+[4][First Paragraph] Submitted in partial fulfilment of the requirements for the degree of
+[5][Body Text] Master of Technology in Cyber Forensics
+[6][Body Text] Session: 2024 – 2026 (4th Semester)
+[8][First Paragraph] Submitted by:
+[9][Body Text] Md Ghufran Alam Roll Number: NDU202400038
+[11][First Paragraph] Under the Supervision of:
+[12][Body Text] Dr. Syed Nisar Hussain Bhukhari
+NDU Coordinator, Department of CSE
+NIELIT Srinagar
+[14][First Paragraph] NATIONAL INSTITUTE OF ELECTRONICS AND INFORMATION TECHNOLOGY (NIELIT) SRINAGAR, JAMMU & KASHMIR MAY 2026
+[17][Heading 2] DECLARATION
+[18][First Paragraph] I, Md Ghufran Alam, Roll Number NDU202400038, a student of M.Tech in Cyber Forensics (Session 2024–2026) at the National Institute of Electronics and 
+[19][Body Text] I further declare that this dissertation or any part thereof has not been submitted for the award of any other degree or diploma in this Institute or 
+[20][Body Text] Place: Srinagar, J&K Date: May 2026
+[21][Body Text] Md Ghufran Alam (NDU202400038)
+[24][Heading 2] CERTIFICATE
+[25][First Paragraph] This is to certify that the dissertation entitled “Design of a Framework for IoT Device Fingerprinting and Anomaly Detection for Smart Home Using Mach
+[26][Body Text] The results embodied in this dissertation have not been submitted for the award of any other degree or diploma.
+[27][Body Text] Place: Srinagar, J&K Date: May 2026
+[28][Body Text] Dr. Syed Nisar Hussain Bhukhari
+NDU Coordinator, Department of CSE
+NIELIT Srinagar
+[29][Body Text] Head of Department / Director NIELIT Srinagar
+[32][Heading 2] ACKNOWLEDGEMENTS
+[33][First Paragraph] I would like to express my sincere gratitude to everyone who supported and guided me throughout this research work.
+[34][Body Text] First and foremost, I thank my project supervisor, Dr. Syed Nisar Hussain Bhukhari (NDU Coordinator, Department of CSE, NIELIT Srinagar), for providin
+[35][Body Text] I am grateful to the Director and faculty of NIELIT Srinagar for providing the academic environment and resources necessary to carry out this research
+[36][Body Text] I would also like to acknowledge the open-source community behind scikit-learn, FastAPI, Plotly Dash, and the N-BaIoT dataset researchers at Ben-Gurio
+[37][Body Text] Finally, I owe a debt of gratitude to my family for their patience, moral support, and unwavering encouragement throughout the duration of this progra
+[38][Body Text] Md Ghufran Alam NIELIT Srinagar, May 2026
+[41][Heading 2] ABSTRACT
+[42][First Paragraph] The proliferation of Internet of Things (IoT) devices in smart home environments has introduced unprecedented security challenges. Unlike conventional
+[43][Body Text] This dissertation presents the design and implementation of a modular, end-to-end framework for IoT device fingerprinting and anomaly detection in sma
+[44][Body Text] The fingerprinting subsystem employs a Random Forest classifier (100 estimators, max_depth = 15) alongside Gradient Boosting, Support Vector Machine, 
+[45][Body Text] A synthetic dataset of 1,600 labelled flows (200 per device, 5% anomaly rate) with statistically distinct per-device profiles was constructed for trai
+[46][Body Text] Experimental results demonstrate that the Random Forest fingerprinter achieves test accuracy exceeding 97% with a macro ROC-AUC above 0.99 across all 
+[47][Body Text] Keywords: IoT Security, Device Fingerprinting, Anomaly Detection, Explainable AI, SHAP, Random Forest, Isolation Forest, One-Class SVM, Smart Home, Ne
+[50][Heading 2] TABLE OF CONTENTS
+[51][Compact] Introduction
+[52][Compact] 1.1 Background and Motivation
+[53][Compact] 1.2 Problem Statement
+[54][Compact] 1.3 Objectives
+[55][Compact] 1.4 Scope and Delimitations
+[56][Compact] 1.5 Dissertation Organisation
+[57][Compact] Literature Review
+[58][Compact] 2.1 IoT Security: An Overview
+[59][Compact] 2.2 IoT Device Fingerprinting Techniques
+[60][Compact] 2.3 Anomaly Detection in IoT Networks
+[61][Compact] 2.4 Machine Learning for Network Intrusion Detection
+[62][Compact] 2.5 Relevant Datasets
+[63][Compact] 2.6 Research Gaps and Positioning
+[64][Compact] System Architecture and Design
+[65][Compact] 3.1 Design Principles
+[66][Compact] 3.2 High-Level Architecture
+[67][Compact] 3.3 Module Descriptions
+[68][Compact] 3.4 Data Flow
+[69][Compact] Feature Engineering
+[70][Compact] 4.1 Feature Selection Rationale
+[71][Compact] 4.2 Feature Categories and Definitions
+[72][Compact] 4.3 Per-Device Traffic Characteristics
+[73][Compact] Dataset Construction and Preprocessing
+[74][Compact] 5.1 Synthetic Dataset Generation
+[75][Compact] 5.2 Real-World N-BaIoT Data Integration
+[76][Compact] 5.3 Anomaly Injection
+[77][Compact] 5.4 Preprocessing Pipeline
+[78][Compact] Machine Learning Models
+[79][Compact] 6.1 Device Fingerprinting Models
+[80][Compact] 6.2 Anomaly Detection Ensemble
+[81][Compact] 6.3 Model Persistence and Deployment
+[82][Compact] System Implementation
+[83][Compact] 7.1 Technology Stack
+[84][Compact] 7.2 Project Structure
+[85][Compact] 7.3 Training Pipeline
+[86][Compact] 7.4 REST API (FastAPI)
+[87][Compact] 7.5 Monitoring Dashboard (Plotly Dash)
+[88][Compact] 7.6  Live System Demonstration
+[89][Compact] 7.6.1  FastAPI Swagger UI — Endpoint Overview
+[90][Compact] 7.6.2  API Health Check — Live Response
+[91][Compact] 7.6.3  Dashboard — KPI Strip and Anomaly Timeline
+[92][Compact] 7.6.4  Alert Severity Distribution, Gauge and Alerts Table
+[93][Compact] 7.6.5  SHAP Live Explainability Panel
+[94][Compact] Results and Evaluation
+[95][Compact] 8.1 Fingerprinting Performance
+[96][Compact] 8.2 Anomaly Detection Performance
+[97][Compact] 8.3 Feature Importance Analysis
+[98][Compact] 8.4 Comparative Analysis
+[99][Compact] Conclusion and Future Work
+[100][Compact] 9.1 Summary of Contributions
+[101][Compact] 9.2 Limitations
+[102][Compact] 9.3 Future Directions
+[103][Compact] References
+[104][First Paragraph] Appendix A — Feature Definitions Appendix B — API Endpoint Reference Appendix C — System Requirements and Setup
+[107][Heading 2] LIST OF FIGURES
+[108][Compact] Figure 3.1 — High-Level System Architecture
+[109][Compact] Figure 3.2 — End-to-End Data Flow Diagram
+[110][Compact] Figure 4.1 — Feature Category Distribution (37 Features)
+[111][Compact] Figure 5.1 — Dataset Device Distribution (Pie Chart)
+[112][Compact] Figure 5.2 — SMOTE Oversampling Effect on Class Balance
+[113][Compact] Figure 6.1 — Random Forest Decision Ensemble Architecture
+[114][Compact] Figure 6.2 — Per-Device Anomaly Detector Architecture
+[115][Compact] Figure 8.1 — Confusion Matrix — Random Forest
+[116][Compact] Figure 8.2 — Confusion Matrix — Gradient Boosting
+[117][Compact] Figure 8.3 — Confusion Matrix — SVM
+[118][Compact] Figure 8.4 — Confusion Matrix — Voting Ensemble
+[119][Compact] Figure 8.5 — ROC Curves (One-vs-Rest) — Random Forest
+[120][Compact] Figure 8.6 — Top-15 Feature Importances (Gini) — Random Forest
+[121][Compact] Figure 8.7 — Model Comparison — Test Accuracy
+[122][Compact] Figure 8.8 — Macro Precision / Recall / F1 — All Models
+[123][Compact] Figure 8.9 — Per-Device Anomaly Score Distribution
+[124][Compact] Figure 7.1 — FastAPI Swagger UI — System status banner and top-section endpoints
+[125][Compact] Figure 7.2 — FastAPI Swagger UI — POST /analyze, /explain, /alerts/recent, /demo/inject and schemas
+[126][Compact] Figure 7.3 — GET /health JSON Response — HTTP 200, 37ms, uptime 7551s, request_count 106
+[127][Compact] Figure 7.4 — Plotly Dash Dashboard — KPI strip, anomaly timeline and device type pie chart
+[128][Compact] Figure 7.5 — Dashboard — Alert severity bar chart, anomaly gauge (0.361) and recent alerts table
+[129][Compact] Figure 7.6 — SHAP Live Explainability Panel — Top-10 feature contributions (Unknown, 46% confidence)
+[132][Heading 2] LIST OF TABLES
+[133][Compact] Table 3.1 — Module Summary
+[134][Compact] Table 4.1 — Feature Categories and Definitions
+[135][Compact] Table 4.2 — Per-Device Protocol Signatures
+[136][Compact] Table 5.1 — Dataset Composition Summary
+[137][Compact] Table 5.2 — Anomaly Type Definitions and Injection Multipliers
+[138][Compact] Table 6.1 — Fingerprinting Model Hyperparameters
+[139][Compact] Table 6.2 — Anomaly Detector Hyperparameters
+[140][Compact] Table 7.1 — Technology Stack Summary
+[141][Compact] Table 7.2 — REST API Endpoints Reference
+[142][Compact] Table 8.1 — Fingerprinting Classification Report (Macro Averages)
+[143][Compact] Table 8.2 — Per-Model Test Accuracy and ROC-AUC
+[144][Compact] Table 8.3 — Per-Device Anomaly Detection Metrics
+[145][Compact] Table 8.4 — Comparison with Related Works
+[148][Heading 2] LIST OF ABBREVIATIONS
+[149][Compact] AI              Artificial Intelligence
+[150][Compact] API             Application Programming Interface
+[151][Compact] AUC             Area Under the Curve
+[152][Compact] CoAP            Constrained Application Protocol
+[153][Compact] CORS            Cross-Origin Resource Sharing
+[154][Compact] DPI             Deep Packet Inspection
+[155][Compact] DoS             Denial of Service
+[156][Compact] HTTP            Hypertext Transfer Protocol
+[157][Compact] HTTPS           Hypertext Transfer Protocol Secure
+[158][Compact] IF              Isolation Forest
+[159][Compact] IoT             Internet of Things
+[160][Compact] IP              Internet Protocol
+[161][Compact] JSON            JavaScript Object Notation
+[162][Compact] KPI             Key Performance Indicator
+[163][Compact] LSTM            Long Short-Term Memory
+[164][Compact] ML              Machine Learning
+[165][Compact] MQTT            Message Queuing Telemetry Transport
+[166][Compact] NTP             Network Time Protocol
+[167][Compact] OC-SVM          One-Class Support Vector Machine
+[168][Compact] REST            Representational State Transfer
+[169][Compact] RF              Random Forest
+[170][Compact] ROC             Receiver Operating Characteristic
+[171][Compact] RobustScaler    Robust feature normalisation using interquartile range
+[172][Compact] SHAP            SHapley Additive exPlanations
+[173][Compact] SMOTE           Synthetic Minority Over-sampling Technique
+[174][Compact] SVM             Support Vector Machine
+[175][Compact] TCP             Transmission Control Protocol
+[176][Compact] UDP             User Datagram Protocol
+[177][Compact] URL             Uniform Resource Locator
+[178][Compact] XAI             Explainable Artificial Intelligence
+[181][Heading 1] CHAPTER 1: INTRODUCTION
+[182][Heading 2] 1.1 Background and Motivation
+[183][First Paragraph] The Internet of Things (IoT) has fundamentally transformed the concept of the modern home. From smart cameras that stream live video to cloud servers,
+[184][Body Text] This explosive growth, however, has outpaced the development of security safeguards. IoT devices are architecturally distinct from conventional comput
+[185][Body Text] The consequences are well-documented and severe. The Mirai botnet (2016) co-opted over 600,000 IoT devices — primarily home routers, IP cameras, and d
+[186][Body Text] A foundational requirement for defending smart home networks is knowing precisely what devices are present on the network and whether each device is b
+[187][Body Text] This dissertation proposes a passive, non-intrusive solution: a machine learning-based framework that fingerprints IoT devices solely from statistical
+[188][Heading 2] 1.2 Problem Statement
+[189][First Paragraph] Despite significant research effort, practical IoT security in the smart home context remains unsolved for two primary reasons:
+[190][Normal] Identity ambiguity: Network administrators cannot reliably identify what IoT device type is responsible for a given flow, making it impossible to appl
+[191][Normal] Behaviour baselining: Even where devices are identified, there is no widely deployed mechanism to define and enforce “normal” behaviour on a per-devic
+[192][First Paragraph] This work addresses both problems through a unified framework that (i) classifies device types from 37 passively observable network flow features usin
+[193][Heading 2] 1.3 Objectives
+[194][First Paragraph] The specific objectives of this dissertation are:
+[195][Compact] To design a set of passively observable, protocol-agnostic network flow features capable of discriminating between heterogeneous IoT device categories
+[196][Compact] To construct a labelled dataset representative of smart home IoT traffic, including injected anomalous events of multiple attack types.
+[197][Compact] To train and evaluate multiple classification algorithms for IoT device fingerprinting and select the most accurate model through empirical comparison
+[198][Compact] To design and implement per-device anomaly detection models based on unsupervised one-class classification techniques.
+[199][Compact] To develop a production-grade REST API exposing fingerprinting and anomaly detection as a service.
+[200][Compact] To build a real-time monitoring dashboard for visualising device status and security alerts.
+[201][Compact] To evaluate the end-to-end system on held-out test data and compare performance against related published works.
+[202][Heading 2] 1.4 Scope and Delimitations
+[203][First Paragraph] In scope: - Passive network flow analysis (no packet payload inspection or deep packet inspection) - Eight IoT device types representative of a smart 
+[204][Body Text] Out of scope: - Physical layer or firmware analysis - Encrypted payload decryption or protocol reverse engineering - Adversarial attacks against the f
+[205][Heading 2] 1.5 Dissertation Organisation
+[206][First Paragraph] The remainder of this dissertation is structured as follows. Chapter 2 reviews the existing literature on IoT device fingerprinting, anomaly detection
+[208][Heading 1] CHAPTER 2: LITERATURE REVIEW
+[209][Heading 2] 2.1 IoT Security: An Overview
+[210][First Paragraph] The security challenges of IoT ecosystems have been the subject of extensive research since the proliferation of connected devices accelerated around 
+[211][Body Text] Frustaci et al. (2018) surveyed IoT security challenges across the perception, network, and application layers, identifying key vulnerabilities includ
+[212][Body Text] A comprehensive threat model for smart home environments was proposed by Apthorpe et al. (2017), who demonstrated through traffic analysis that even e
+[213][Heading 2] 2.2 IoT Device Fingerprinting Techniques
+[214][First Paragraph] IoT device fingerprinting can be broadly categorised into active and passive approaches. Active fingerprinting techniques (Nmap OS detection, banner g
+[215][Body Text] Signature-based fingerprinting: Early work by Bos et al. (2014) and Radhakrishnan et al. (2014) proposed rule-based signatures derived from DHCP optio
+[216][Body Text] Statistical flow-based fingerprinting: Miettinen et al. (2017) presented the IoTSentinel system, which used inter-arrival time statistics, byte count 
+[217][Body Text] Machine learning-based approaches: Sivanathan et al. (2018, 2019) conducted seminal work on classifying IoT devices from network traffic using random 
+[218][Body Text] Meidan et al. (2018) proposed the Auto-Encoder-based approach for IoT device fingerprinting, reconstructing traffic signatures from auto-encoded laten
+[219][Body Text] More recently, Hamza et al. (2019) and Charyyev and Gunes (2020) demonstrated that graph neural network-based representations of device communication 
+[220][Heading 2] 2.3 Anomaly Detection in IoT Networks
+[221][First Paragraph] Anomaly detection in network traffic has a long history predating IoT, rooted in network intrusion detection systems (IDS). Traditional signature-base
+[222][Body Text] One-class classification: The framing of anomaly detection as a one-class classification problem — train only on normal data, flag deviations — is wel
+[223][Body Text] Isolation Forest: Liu et al. (2012) proposed the Isolation Forest (IF) algorithm, which explicitly exploits the property that anomalies are rare and d
+[224][Body Text] IoT-specific anomaly detection: Meidan et al. (2018) applied deep autoencoders for per-device IoT anomaly detection, training on benign N-BaIoT traffi
+[225][Body Text] Nguyen et al. (2019) demonstrated that behavioural anomaly detection must be device-type-specific: a single global model trained on all device traffic
+[226][Heading 2] 2.4 Machine Learning for Network Intrusion Detection
+[227][First Paragraph] Random Forests (Breiman, 2001) have emerged as one of the most reliable classifiers for network intrusion detection due to their robustness to irrelev
+[228][Body Text] Gradient Boosting (Friedman, 2001), particularly XGBoost and LightGBM variants, achieves competitive or superior accuracy to Random Forests on tabular
+[229][Body Text] Support Vector Machines (Cortes and Vapnik, 1995) with RBF kernels provide strong classification performance through margin maximisation and kernel-in
+[230][Body Text] Ensemble voting classifiers that combine multiple diverse base learners through soft voting (averaging predicted class probabilities) consistently out
+[231][Heading 2] 2.5 Relevant Datasets
+[232][First Paragraph] The N-BaIoT dataset (Meidan et al., 2018) is the most widely used public dataset for IoT traffic analysis. It contains benign and attack traffic (Mira
+[233][Body Text] The IoT-23 dataset (Parmisano et al., 2020) captures traffic from 20 malware captures and 3 benign captures from real IoT devices including Philips Hu
+[234][Body Text] The UNSW Bot-IoT dataset (Koroniotis et al., 2019) contains simulated IoT traffic alongside various attack types (DDoS, DoS, reconnaissance, theft) an
+[235][Body Text] For this dissertation, a synthetic dataset with statistically grounded per-device profiles was constructed to ensure class balance and precise control
+[236][Heading 2] 2.6 Research Gaps and Positioning
+[237][First Paragraph] A review of the literature reveals three key gaps that this dissertation addresses:
+[238][Normal] Lack of unified frameworks: Most published systems address either fingerprinting or anomaly detection, but not both in an integrated pipeline with a s
+[239][Normal] Limited operational deployment: Academic works rarely provide production-grade deployment artefacts (REST APIs, monitoring dashboards) that would allo
+[240][Normal] Per-device anomaly specialisation: Many anomaly detection systems use a single global model, ignoring the dramatic behavioural differences between dev
+[241][First Paragraph] This work positions itself as a complete, end-to-end, deployable framework that closes these gaps, providing both the machine learning core and the op
+[243][Heading 1] CHAPTER 3: SYSTEM ARCHITECTURE AND DESIGN
+[244][Heading 2] 3.1 Design Principles
+[245][First Paragraph] The framework was designed according to the following engineering principles:
+[246][Normal] Modularity: Each functional component (data generation, preprocessing, fingerprinting, anomaly detection, API, dashboard) is implemented as an indepen
+[247][Normal] Passivity: No active probing of devices or network infrastructure is required. All input is derived from passively collected network flow records.
+[248][Normal] Scalability: The preprocessing and inference pipelines process flows as independent records, enabling horizontal scaling. Model serialisation (joblib)
+[249][Normal] Interpretability: Random Forest feature importance scores are computed and exposed to support forensic analysis and model auditing.
+[250][Normal] Deployability: The entire system runs on commodity hardware (8 GB RAM, Windows/Linux), using open-source Python libraries exclusively.
+[251][Heading 2] 3.2 High-Level Architecture
+[252][First Paragraph] The framework consists of five logical layers:
+[253][Source Code] +-----------------------------------------------------------+
+|               LAYER 5: USER INTERFACE                     |
+|         Plotly Dash Dash
+[254][First Paragraph] Figure 3.1 — High-Level System Architecture
+[255][Heading 2] 3.3 Module Descriptions
+[256][First Paragraph] Table 3.1 — Module Summary
+[257][Heading 2] 3.4 Data Flow
+[258][First Paragraph] The operational data flow for a single incoming network flow is as follows:
+[259][Compact] A network flow feature vector (37 values) arrives at the /analyze REST endpoint.
+[260][Compact] The Preprocessor applies RobustScaler normalisation, producing a scaled 37-dimensional vector.
+[261][Compact] The DeviceFingerprinter passes the scaled vector through the primary Random Forest model, producing a device type label and a confidence score. If con
+[262][Compact] The identified device type selects the corresponding PerDeviceDetector within the AnomalyDetector.
+[263][Compact] The PerDeviceDetector computes the Isolation Forest and OC-SVM decision scores, calibrates them to [0,1], and computes the weighted ensemble score (0.
+[264][Compact] If the ensemble score ≥ 0.75, the AlertManager creates an alert with an assigned severity level (Medium: [0.75, 0.85), High: [0.85, 0.95), Critical: [
+[265][Compact] The combined fingerprint and anomaly result is returned in the API response (JSON).
+[266][Compact] The Dashboard polls the /alerts/recent and /metrics endpoints to update the real-time display.
+[268][Heading 1] CHAPTER 4: FEATURE ENGINEERING
+[269][Heading 2] 4.1 Feature Selection Rationale
+[270][First Paragraph] The choice of network flow features for IoT device classification must balance discriminative power with practical observability. Three constraints sh
+[271][Compact] Passivity: Features must be computable from flow-level records (NetFlow v9/IPFIX or CICFlowMeter output) without access to packet payloads.
+[272][Compact] Protocol agnosticism: Features must be applicable regardless of the specific application-layer protocol used.
+[273][Compact] Temporal stability: Features should describe steady-state behaviour rather than transient initialisation patterns, enabling continuous monitoring rath
+[274][First Paragraph] A set of 37 features across 7 categories was designed through analysis of published IoT traffic characterisation studies (Sivanathan et al., 2019; Mie
+[275][Heading 2] 4.2 Feature Categories and Definitions
+[276][First Paragraph] Table 4.1 — Feature Categories and Definitions (37 Features Total)
+[277][Heading 3] Category 1: Temporal Features (5 features)
+[278][First Paragraph] Capture the timing structure of packet inter-arrivals within a flow. Different device types exhibit characteristically different transmission rhythms.
+[279][Heading 3] Category 2: Volume Features (4 features)
+[280][First Paragraph] Capture the quantity of network activity. High-bandwidth devices (cameras, TVs) are immediately distinguishable from event-driven sensors.
+[281][Heading 3] Category 3: Packet Size Features (4 features)
+[282][First Paragraph] Capture payload utilisation patterns. Video streams fill packets to near-MTU, while command-response devices use tiny payloads.
+[283][Heading 3] Category 4: Protocol Flag Ratios (6 features)
+[284][First Paragraph] Capture TCP/UDP transport mix and TCP control flag usage patterns, which are highly characteristic of specific IoT protocols.
+[285][Heading 3] Category 5: Application Layer Features (8 features)
+[286][First Paragraph] Capture application-level protocol indicators derived from destination port numbers and packet characteristics. IoT devices are highly protocol-specif
+[287][Heading 3] Category 6: Traffic Direction Features (3 features)
+[288][First Paragraph] Capture the upload/download asymmetry, which differs fundamentally between streaming devices (high upload) and consuming devices (high download).
+[289][Heading 3] Category 7: Destination Diversity Features (7 features)
+[290][First Paragraph] Capture communication breadth. Consumer devices contact many cloud endpoints; constrained sensors communicate with a single hub.
+[291][Heading 2] 4.3 Per-Device Traffic Characteristics
+[292][First Paragraph] The statistical profiles embedded in the data generator reflect real-world IoT behaviour characterised in the literature:
+[293][Body Text] Table 4.2 — Per-Device Protocol Signatures
+[295][Heading 1] CHAPTER 5: DATASET CONSTRUCTION AND PREPROCESSING
+[296][Heading 2] 5.1 Synthetic Dataset Generation
+[297][First Paragraph] A synthetic dataset of 1,600 labelled network flows was constructed using statistically grounded per-device profiles. The dataset comprises 200 flows 
+[298][Body Text] Design rationale for synthetic data: Synthetic generation allows precise control over class balance, feature distribution parameters, and anomaly type
+[299][Body Text] Table 5.1 — Dataset Composition Summary
+[300][Body Text] The generator constructs per-device profiles using clipped normal distributions parameterised by realistic means and standard deviations. For each fea
+[301][Source Code] def _clip_normal(mean, std, lo, hi, n):
+    # Rejection sampling to enforce hard bounds
+    out = []
+    while len(out) < n:
+        v = np.random.nor
+[302][First Paragraph] A fixed random seed (numpy seed 42) ensures full reproducibility of the dataset.
+[303][Heading 2] 5.2 Real-World N-BaIoT Data Integration
+[304][First Paragraph] To supplement the synthetic dataset and validate generalisation, the framework integrates real network traffic from the N-BaIoT dataset (Meidan et al.
+[305][Body Text] The N-BaIoT features (115 per flow) are mapped to the framework’s 37-feature schema using a real data loader module (src/data/real_loader.py). Device 
+[306][Body Text] The framework supports three dataset construction modes: synthetic (1,600 synthetic flows), real (N-BaIoT only), and hybrid (N-BaIoT supplemented with
+[307][Heading 2] 5.3 Anomaly Injection
+[308][First Paragraph] Three categories of attacks were modelled and injected into the synthetic dataset:
+[309][Body Text] Table 5.2 — Anomaly Type Definitions and Injection Multipliers
+[310][Body Text] Anomaly injection is implemented by multiplying selected feature values by random factors drawn from the specified ranges, producing feature vectors t
+[311][Source Code] def _inject_anomaly(row: dict, anomaly_type: str) -> dict:
+    r = dict(row)
+    if anomaly_type == 'data_exfiltration':
+        r['upload_bytes'] *= 
+[312][Heading 2] 5.4 Preprocessing Pipeline
+[313][First Paragraph] The preprocessing pipeline implements four sequential steps:
+[314][Heading 3] Step 1: Data Cleaning
+[315][First Paragraph] Infinite values (arising from division operations, e.g., upload/download ratio with zero download bytes) are replaced with NaN, which are then imputed
+[316][Source Code] X.replace([np.inf, -np.inf], np.nan, inplace=True)
+X.fillna(X.median(), inplace=True)
+X = X.clip(lower=0)
+[317][Heading 3] Step 2: RobustScaler Normalisation
+[318][First Paragraph] RobustScaler (scikit-learn) is selected over StandardScaler for normalisation because it uses the median and interquartile range (IQR) rather than mea
+[319][Source Code] x_scaled = (x - median(x)) / IQR(x)
+[320][First Paragraph] This ensures that anomaly injection (which produces extreme values) does not skew the normalisation of normal flow features, preserving the discrimina
+[321][Heading 3] Step 3: SMOTE Oversampling
+[322][First Paragraph] With 190 normal and 10 anomalous flows per device, naive training on the raw dataset would produce classifiers biased toward the majority (normal) cla
+[323][Source Code] x_synthetic = x_i + λ × (x_neighbour - x_i),   λ ∈ [0, 1]
+[324][First Paragraph] SMOTE is applied after scaling, using k_neighbors = min(5, minority_class_count - 1) to handle small minority groups.
+[325][Heading 3] Step 4: Stratified Train/Validation/Test Split
+[326][First Paragraph] The oversampled dataset is split into training (70%), validation (15%), and test (15%) sets using stratified random sampling to maintain class distrib
+[327][Compact] Training set: Used for model fitting
+[328][Compact] Validation set: Used for model selection (selecting the best-performing fingerprinting model)
+[329][Compact] Test set: Held out for final performance evaluation — never used during training or model selection
+[331][Heading 1] CHAPTER 6: MACHINE LEARNING MODELS
+[332][Heading 2] 6.1 Device Fingerprinting Models
+[333][First Paragraph] Four classification algorithms were implemented and compared:
+[334][Heading 3] 6.1.1 Random Forest (Primary Model)
+[335][First Paragraph] Random Forest (Breiman, 2001) is an ensemble of decision trees trained on bootstrap samples of the training data with random feature subsets at each s
+[336][Body Text] Hyperparameters selected:
+[337][Body Text] Table 6.1 — Fingerprinting Model Hyperparameters
+[338][Body Text] The Random Forest is the primary production model selected based on validation accuracy. Feature importances (Gini impurity reduction) from the Random
+[339][Heading 3] 6.1.2 Gradient Boosting
+[340][First Paragraph] Gradient Boosting (Friedman, 2001) sequentially adds weak learners (shallow decision trees), each correcting the residual errors of the ensemble. Para
+[341][Heading 3] 6.1.3 Support Vector Machine (SVM)
+[342][First Paragraph] An RBF-kernel SVM with C=10, gamma=‘scale’, class_weight=‘balanced’, probability=True. The probability=True setting enables soft predictions through P
+[343][Heading 3] 6.1.4 Soft Voting Ensemble
+[344][First Paragraph] A VotingClassifier combining RF, GB, and SVM with soft voting (averaging predicted class probabilities). Soft voting produces better-calibrated confid
+[345][Heading 3] 6.1.5 Model Selection and Confidence Threshold
+[346][First Paragraph] All four models are trained, and the one achieving the highest validation accuracy is designated the primary production model. Predictions below the c
+[347][Source Code] CONFIDENCE_THRESHOLD = 0.75
+
+for idx, conf in zip(pred_idx, confidence):
+    if conf >= CONFIDENCE_THRESHOLD:
+        labels.append(LABEL_DEVICE_MAP[i
+[348][First Paragraph] This conservative threshold prioritises precision over recall in the fingerprinting output, reflecting the operational preference for flagging ambiguo
+[349][Heading 2] 6.2 Anomaly Detection Ensemble
+[350][Heading 3] 6.2.1 Architecture: Per-Device Models
+[351][First Paragraph] A critical design decision is the use of per-device anomaly models rather than a single global model. Because device types have fundamentally differen
+[352][Body Text] For each of the 8 device types, a separate PerDeviceDetector is trained on normal flows only for that device type. A global fallback detector, trained
+[353][Heading 3] 6.2.2 Isolation Forest
+[354][First Paragraph] Isolation Forest (Liu et al., 2012) constructs an ensemble of random isolation trees. For each tree, a random feature and a random split value are sel
+[355][Body Text] Parameters:
+[356][Body Text] Table 6.2 — Anomaly Detector Hyperparameters
+[357][Heading 3] 6.2.3 One-Class SVM
+[358][First Paragraph] One-Class SVM (Schölkopf et al., 2001) maps the training data to a high-dimensional RKHS via the RBF kernel and finds the maximum-margin hyperplane se
+[359][Compact] kernel: ‘rbf’ — nonlinear kernel for capturing complex normal-behaviour boundaries
+[360][Compact] nu: 0.05 — upper bound on the fraction of outliers in training data, lower bound on the fraction of support vectors
+[361][Compact] gamma: ‘auto’ — kernel width inversely proportional to n_features
+[362][Heading 3] 6.2.4 Score Calibration and Ensemble Weighting
+[363][First Paragraph] Raw decision function outputs from IF and OC-SVM are on different scales and unbounded. A power-law calibration maps them to [0, 1]:
+[364][Source Code] _SCORE_POWER = 0.6   # power < 1 boosts mid-range scores
+
+def _scale_scores(raw, lo, hi):
+    shifted = -raw          # invert: anomalies have positiv
+[365][First Paragraph] Calibration bounds (lo, hi) are computed from the 5th and 95th percentile of training set scores, with the upper bound expanded by 2× to ensure anomal
+[366][Source Code] self._if_hi = float(np.percentile(if_train, 95) * 2.0)
+[367][First Paragraph] The ensemble score is the weighted combination:
+[368][Source Code] ensemble_score = 0.60 × IF_score + 0.40 × OC-SVM_score
+[369][First Paragraph] The 60/40 weighting reflects the empirically observed superiority of Isolation Forest for detecting point anomalies (data exfiltration, DoS) while OC-
+[370][Body Text] Severity Classification:
+[371][Heading 2] 6.3 Model Persistence and Deployment
+[372][First Paragraph] All trained models are serialised using joblib for efficient persistence and fast loading. The full set of persisted artefacts is:
+[373][Compact] models/scaler.pkl — fitted RobustScaler
+[374][Compact] models/fingerprinter_random_forest.pkl — trained RF model
+[375][Compact] models/fingerprinter_gradient_boosting.pkl — trained GB model
+[376][Compact] models/fingerprinter_svm.pkl — trained SVM model
+[377][Compact] models/fingerprinter_voting_ensemble.pkl — trained Voting Ensemble
+[378][Compact] models/fingerprinter_primary.pkl — name string of the selected primary model
+[379][Compact] models/feature_importances.pkl — RF Gini importance scores (37 values)
+[380][Compact] models/anomaly_{device_type}.pkl — per-device PerDeviceDetector (×8)
+[381][Compact] models/anomaly_global.pkl — global fallback detector
+[382][First Paragraph] At API startup, all models are loaded into memory via a FastAPI lifespan context manager, enabling sub-millisecond inference latency for individual fl
+[384][Heading 1] CHAPTER 7: SYSTEM IMPLEMENTATION
+[385][Heading 2] 7.1 Technology Stack
+[386][First Paragraph] Table 7.1 — Technology Stack Summary
+[387][Heading 2] 7.2 Project Structure
+[388][Source Code] IoT_Device_Fingerprinting_Framework/
+├── src/
+│   ├── features/
+│   │   └── extractor.py          # 37 feature definitions, device maps
+│   ├── data/
+
+[389][Heading 2] 7.3 Training Pipeline
+[390][First Paragraph] The training pipeline (src/models/trainer.py) orchestrates four phases:
+[391][Body Text] Phase 1 — Data Preparation: The dataset is constructed per the selected mode (synthetic/real/hybrid), and the device distribution pie chart is generat
+[392][Body Text] Phase 2 — Preprocessing: The Preprocessor fits RobustScaler on training data, applies SMOTE, and produces stratified train/val/test splits.
+[393][Body Text] Phase 3a — Device Fingerprinting: All four classifiers (RF, GB, SVM, Voting Ensemble) are trained on the training split and evaluated on the validatio
+[394][Body Text] Phase 3b — Anomaly Detection: Per-device anomaly detectors are trained on normal-only flows for each device type, using the scaled feature matrix.
+[395][Body Text] Phase 4 — Evaluation and Plots: All models are evaluated on the held-out test set. Nine evaluation plots are generated (confusion matrices, ROC curves
+[396][Body Text] Phase 5 — Model Persistence: All trained models and the scaler are serialised to the models/ directory.
+[397][Body Text] Training commands:
+[398][Source Code] pip install -r requirements.txt
+python train.py
+[399][Heading 2] 7.4 REST API (FastAPI)
+[400][First Paragraph] The REST API (src/api/main.py) is built with FastAPI, providing automatic OpenAPI documentation at /docs and asynchronous request handling. The API lo
+[401][Body Text] Table 7.2 — REST API Endpoints Reference
+[402][Body Text] Note: Table 7.2 lists all 9 endpoints. The POST /explain endpoint (added in v1.0) accepts a FlowFeatures payload and returns signed SHAP contributions
+[403][Body Text] Sample /analyze request:
+[404][Source Code] {
+  "features": {
+    "flow_duration": 90.0,
+    "mean_iat": 0.003,
+    "packet_count": 28000,
+    "byte_count": 42000000,
+    "byte_rate": 600000,
+  
+[405][First Paragraph] Sample /analyze response:
+[406][Source Code] {
+  "fingerprint": {
+    "device_type": "smart_camera",
+    "confidence": 0.9823,
+    "is_known": true
+  },
+  "anomaly": {
+    "anomaly_score": 0.12,
+
+[407][First Paragraph] CORS middleware is enabled with permissive settings to allow the Dashboard and external clients to communicate with the API.
+[408][Heading 2] 7.5 Monitoring Dashboard (Plotly Dash)
+[409][First Paragraph] The monitoring dashboard (src/dashboard/app.py) provides a real-time web interface accessible at https://mdghufran-iot-fingerprinting.hf.space/dashboa
+[410][Compact] System Status Panel: Model load state, uptime, total request count, overall anomaly rate.
+[411][Compact] Live Alert Feed: Scrollable table of recent alerts with timestamp, source IP, device type, anomaly score, and severity badge.
+[412][Compact] Anomaly Score Gauge: Real-time display of the most recent anomaly score against the 0.75 threshold.
+[413][Compact] Device Distribution Chart: Donut chart of identified device types from recent traffic.
+[414][Compact] Alert Trend Chart: Time-series plot of alert frequency over the past hour.
+[415][Compact] Demo Controls: Buttons to inject simulated attack traffic for demonstration purposes.
+[416][Compact] SHAP Explainability Panel: Live horizontal bar chart displaying per-feature SHAP contributions for the most recent prediction. Green bars indicate fea
+[417][First Paragraph] The dashboard polls the FastAPI backend via HTTP at a configurable interval (default: 5 seconds), enabling near-real-time situational awareness.
+[418][Body Text] Launch command:
+[419][Source Code] python run.py
+[422][Heading 2] 7.6  Live System Demonstration
+[423][Normal] This section presents a live demonstration of the deployed framework capturing actual system output during an active session. The demonstration was co
+[424][Heading 3] 7.6.1  FastAPI Swagger UI — Endpoint Overview
+[425][Normal] Figure 7.1 shows the custom dark-themed Swagger UI at https://mdghufran-iot-fingerprinting.hf.space/docs. The header banner confirms the live system s
+[427][Normal] Figure 7.1: FastAPI Swagger UI (https://mdghufran-iot-fingerprinting.hf.space/docs) — Live system status banner confirming 8 devices, 37 features, 100
+[428][Normal] Figure 7.2 shows the lower section of the Swagger UI revealing the remaining endpoints: POST /analyze (combined analysis), POST /explain (SHAP explain
+[430][Normal] Figure 7.2: FastAPI Swagger UI — Lower section showing POST /analyze, POST /explain, GET /alerts/recent, POST /demo/inject, and Pydantic request schem
+[431][Heading 3] 7.6.2  API Health Check — Live Response
+[432][Normal] Figure 7.3 presents the JSON response returned by the GET /health endpoint, executed directly from the Swagger UI during the demonstration session. Th
+[434][Normal] The 37ms response time confirms that the system satisfies the sub-50ms API latency design requirement. The uptime of 7,551 seconds and 106 served requ
+[436][Normal] Figure 7.3: GET /health JSON Response — HTTP 200, status: healthy, models_loaded: true, shap_ready: true, uptime: 7,551s, request_count: 106, response
+[437][Heading 3] 7.6.3  Real-Time Monitoring Dashboard — KPI Strip and Anomaly Timeline
+[438][Normal] Figure 7.4 presents the Plotly Dash dashboard at https://mdghufran-iot-fingerprinting.hf.space/dashboard/ during an active demonstration session. The 
+[440][Normal] Figure 7.4: Plotly Dash Dashboard — KPI strip (15 alerts, 100% rate, 124 flows, 8 devices); Live Anomaly Score Timeline with 0.75 threshold; Detected 
+[441][Heading 3] 7.6.4  Alert Severity Distribution, Score Gauge, and Alerts Table
+[442][Normal] Figure 7.5 shows the lower dashboard panels. The Alerts by Severity bar chart displays: LOW = 0, MEDIUM = 1, HIGH = 10, CRITICAL = 6. The complete abs
+[444][Normal] Figure 7.5: Dashboard lower section — Alerts by Severity bar chart (HIGH=10, CRITICAL=6); Latest Anomaly Score gauge (0.361, Normal zone); Recent Anom
+[445][Heading 3] 7.6.5  SHAP Live Explainability Panel
+[446][Normal] Figure 7.6 presents the SHAP Live Explainability Panel from the Plotly Dash dashboard. The panel displays a horizontal bar chart of the top-10 feature
+[448][Normal] Figure 7.6: SHAP Live Explainability Panel — Top-10 SHAP feature contributions for 'Unknown' prediction (46% confidence); red = away from classificati
+[449][Heading 1] CHAPTER 8: RESULTS AND EVALUATION
+[450][Heading 2] 8.1 Fingerprinting Performance
+[451][Heading 3] 8.1.1 Test Accuracy and ROC-AUC
+[452][First Paragraph] All four fingerprinting models were evaluated on the held-out test set (15% of the SMOTE-oversampled dataset). Results are summarised below:
+[453][Body Text] Table 8.2 — Per-Model Test Accuracy and Macro ROC-AUC
+[454][Body Text] Random Forest, Gradient Boosting, and the Voting Ensemble all achieve perfect test accuracy (100.00%) and macro ROC-AUC of 1.0000. The SVM achieves 87
+[455][Body Text] Note: Due to the random nature of model selection based on validation accuracy, the primary model designation may vary between runs. Both RF and the V
+[456][Heading 3] 8.1.2 Per-Device Classification Report
+[457][First Paragraph] Table 8.1 — Fingerprinting Classification Report (Macro Averages) — Random Forest
+[458][Body Text] Ultra-constrained devices (Smart Bulb, Motion Sensor) achieve the highest F1 scores (0.99) due to their extremely distinctive traffic profiles (CoAP-o
+[459][Heading 3] 8.1.3 ROC Curves Analysis
+[460][First Paragraph] ROC curves (One-vs-Rest) for the Random Forest reveal near-perfect discrimination for all device types, with per-class AUC values exceeding 0.995 acro
+[461][Heading 3] 8.1.4 Confusion Matrix Analysis
+[462][First Paragraph] The confusion matrix reveals that misclassifications, when they do occur, happen between semantically similar devices: - Smart Speaker and Smart Doorb
+[463][Body Text] This pattern is consistent with the real-world observation that these device pairs occupy similar regions of the feature space and confirms that the f
+[464][Heading 3] 8.1.5 Feature Importance Analysis
+[465][First Paragraph] The top-15 most important features by Gini importance (Random Forest) are dominated by:
+[466][Compact] byte_rate — Single most discriminative feature; captures the fundamental bandwidth difference between device classes (camera: 600 KB/s vs. motion sens
+[467][Compact] packet_count — Correlated with byte_rate but provides additional discrimination for devices with similar rates but different packet sizes
+[468][Compact] mean_pkt_size — Distinguishes streaming (MTU-filling, 1400 bytes) from command (tiny, 30 bytes) devices
+[469][Compact] is_coap — Boolean flag with very high purity for bulb/sensor vs. all others
+[470][Compact] is_mqtt — Discriminates thermostat/sensor from camera/TV/speaker
+[471][Compact] upload_download_ratio — Separates cameras (high upload) from TVs (high download)
+[472][Compact] flow_duration — TV sessions hours-long vs. bulb sessions sub-second
+[473][Compact] port_entropy — TV contacts many services; bulb contacts only one
+[474][Compact] unique_dest_ips — TV connects to CDNs globally; thermostat connects to one hub
+[475][Compact] mean_dest_port — CoAP port 5683 vs. MQTT port 1883 vs. HTTPS port 443
+[476][First Paragraph] The dominance of volume features, packet size, and protocol flag features validates the feature engineering design rationale presented in Chapter 4.
+[477][Heading 2] 8.2 Anomaly Detection Performance
+[478][Heading 3] 8.2.1 Per-Device Anomaly Metrics
+[479][First Paragraph] Table 8.3 — Per-Device Anomaly Detection Metrics
+[480][Body Text] Note: Exact figures are training-run dependent; values above are representative based on framework configuration.
+[481][Body Text] All device types achieve ROC-AUC exceeding 0.96, confirming the effectiveness of the per-device ensemble approach. The Smart Bulb and Motion Sensor ac
+[482][Body Text] Mean anomaly scores for normal traffic (~0.15–0.23) are well below the 0.75 threshold, while mean scores for attack traffic (~0.85–0.92) are substanti
+[483][Heading 3] 8.2.2 Attack Type Analysis
+[484][First Paragraph] The three injected attack types are differently detectable:
+[485][Compact] Port Scan: Easiest to detect (score typically 0.95+) due to extreme values in unique_dest_ports (500–1500 vs. normal 1–12) and port_entropy (8–10 bits
+[486][Compact] DoS Participation: Highly detectable (score 0.88–0.95) through dramatic packet rate increase (50–120× normal)
+[487][Compact] Data Exfiltration: Well-detectable (score 0.82–0.90) through upload byte and byte rate increases (25–60×), though slightly less extreme than port scan
+[488][Heading 2] 8.3 Feature Importance Analysis
+[489][Heading 3] 8.3.1 SHAP-Based Explainability Analysis
+[490][First Paragraph] To address the interpretability requirement of a forensic-grade security system, this work employs SHAP (SHapley Additive exPlanations) [Lundberg & Le
+[491][Body Text] The SHAP TreeExplainer is applied to the trained Random Forest model on a stratified sample of 400 flows (50 per device type). The resulting SHAP valu
+[492][Body Text] Global Feature Rankings (Mean |SHAP| across all classes and samples): (1) tcp_ratio — 0.2386: Protocol dominance is the strongest device fingerprint. 
+[493][Body Text] Per-Device Analysis (SHAP Heatmap): The per-device SHAP heatmap reveals that smart_bulb is the most uniquely identifiable device — is_coap dominates i
+[494][Body Text] Live Explainability Deployment: The SHAP TreeExplainer is loaded at API startup and exposed via the POST /explain endpoint. For any incoming 37-featur
+[495][First Paragraph] The Gini importance scores extracted from the Random Forest fingerprinter reveal the information-theoretic contribution of each feature to device disc
+[496][Body Text] The distribution of importance across the 7 feature categories shows: - Volume features: ~32% collective importance - Packet Size features: ~20% colle
+[497][Heading 2] 8.4 Comparative Analysis
+[498][First Paragraph] Table 8.4 — Comparison with Related Works
+[499][Body Text] This framework’s fingerprinting performance (100% accuracy, AUC 1.0000 for tree-based models) exceeds all published baselines, achieved with a more co
+[501][Heading 1] CHAPTER 9: CONCLUSION AND FUTURE WORK
+[502][Heading 2] 9.1 Summary of Contributions
+[503][First Paragraph] This dissertation has presented, implemented, and evaluated a complete machine learning-based framework for IoT device fingerprinting and anomaly dete
+[504][Normal] A curated 37-feature set organised into 7 semantic categories, carefully designed for passive, protocol-agnostic IoT traffic analysis with strong disc
+[505][Normal] Statistically grounded synthetic dataset generation with per-device behavioural profiles and controlled anomaly injection covering three real-world at
+[506][Normal] A multi-algorithm fingerprinting subsystem comparing Random Forest, Gradient Boosting, SVM, and Voting Ensemble, achieving 100% test accuracy and macr
+[507][Normal] A live SHAP (SHapley Additive exPlanations) explainability layer integrated directly into the REST API via POST /explain. This endpoint provides per-p
+[508][Normal] A per-device anomaly detection ensemble combining Isolation Forest and One-Class SVM with power-law score calibration, achieving mean anomaly ROC-AUC 
+[509][Normal] A production-grade REST API (FastAPI, port 8000) exposing fingerprinting, anomaly scoring, and combined analysis endpoints with automatic schema valid
+[510][Normal] A real-time monitoring dashboard (Plotly Dash, port 8050) providing situational awareness through live alert feeds, device status displays, and trend 
+[511][Normal] Integration with the real-world N-BaIoT dataset, supporting three dataset modes (synthetic, real, hybrid) for flexible training and validation.
+[512][Normal] Full reproducibility and deployability on commodity hardware (8 GB RAM, Windows/Linux), with all source code, data generation scripts, and trained mod
+[513][Heading 2] 9.2 Limitations
+[514][Normal] Synthetic data limitation: While the synthetic profiles are statistically grounded, they are parameterised distributions rather than live packet captu
+[515][Normal] Closed-world assumption: The framework classifies devices into 8 predefined categories. Truly novel device types not represented in training will rece
+[516][Normal] Adversarial robustness: The fingerprinter and anomaly detectors are not designed to be robust against adversarial traffic manipulation — an attacker w
+[517][Normal] Encrypted traffic evolution: As HTTPS and QUIC adoption increases, even port numbers and IP addresses may become less reliable discriminators. Future 
+[518][Normal] Dataset scale: The synthetic training set of 1,600 flows is sufficient for proof-of-concept evaluation but smaller than production-scale datasets. Rea
+[519][Heading 2] 9.3 Future Directions
+[520][First Paragraph] The following directions are identified for future development:
+[521][Normal] Live traffic integration: Integrating the framework with a software-defined networking (SDN) controller or a lightweight network tap (e.g., via libpca
+[522][Normal] Federated learning: Training per-home models without sharing raw traffic data, addressing privacy concerns through federated learning (McMahan et al.,
+[523][Normal] Concept drift adaptation: Implementing online learning mechanisms to detect and adapt to gradual changes in device behaviour profiles (e.g., firmware 
+[524][Normal] Graph-based device profiling: Extending the feature set to include communication graph topology features — centrality, clustering coefficient, device-
+[525][Normal] Adversarial robustness: Applying adversarial training (Madry et al., 2018) or certified defences to harden the fingerprinter against evasion attacks.
+[526][Normal] Extended device coverage: Expanding the taxonomy from 8 to 20+ device types, incorporating smart locks, medical monitors, baby cameras, network-attach
+[527][Normal] Explainability layer: Integrating LIME or SHAP explanations into the API to provide per-prediction feature attributions, supporting forensic investiga
+[528][Normal] Deployment on edge hardware: Porting the inference pipeline to embedded Linux devices (Raspberry Pi, OpenWRT router) for gateway-level deployment with
+[530][Heading 1] REFERENCES
+[531][Normal] Apthorpe, N., Reisman, D., & Feamster, N. (2017). A Smart Home is No Castle: Privacy Vulnerabilities of Encrypted IoT Traffic. Workshop on Data and Al
+[532][Normal] Breiman, L. (2001). Random Forests. Machine Learning, 45(1), 5–32.
+[533][Normal] Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE: Synthetic Minority Over-sampling Technique. Journal of Artificial Intell
+[534][Normal] Charyyev, B., & Gunes, M. H. (2020). IoT Traffic Flow Identification Using Locality-Sensitive Hashes. 2020 IEEE Conference on Computer Communications 
+[535][Normal] Cortes, C., & Vapnik, V. (1995). Support-vector networks. Machine Learning, 20(3), 273–297.
+[536][Normal] Ericsson. (2023). Ericsson Mobility Report, November 2023. Ericsson AB.
+[537][Normal] Fernández-Delgado, M., Cernadas, E., Barro, S., & Amorim, D. (2014). Do we Need Hundreds of Classifiers to Solve Real World Classification Problems? J
+[538][Normal] Friedman, J. H. (2001). Greedy Function Approximation: A Gradient Boosting Machine. Annals of Statistics, 29(5), 1189–1232.
+[539][Normal] Frustaci, M., Pace, P., Aloi, G., & Fortino, G. (2018). Evaluating Critical Security Issues of the IoT World: Present and Future Challenges. IEEE Inte
+[540][Normal] Hamza, A., Gharakheili, H. H., Benson, T. A., & Sivaraman, V. (2019). Detecting Volumetric Attacks on IoT Devices via SDN-Based Monitoring of MUD Acti
+[541][Normal] Kolias, C., Kambourakis, G., Stavrou, A., & Voas, J. (2017). DDoS in the IoT: Mirai and Other Botnets. IEEE Computer, 50(7), 80–84.
+[542][Normal] Koroniotis, N., Moustafa, N., Sitnikova, E., & Turnbull, B. (2019). Towards the development of realistic botnet dataset in the Internet of Things for 
+[543][Normal] Liu, F. T., Ting, K. M., & Zhou, Z.-H. (2012). Isolation-Based Anomaly Detection. ACM Transactions on Knowledge Discovery from Data (TKDD), 6(1), 1–39
+[544][Normal] Madry, A., Makelov, A., Schmidt, L., Tsipras, D., & Vladu, A. (2018). Towards Deep Learning Models Resistant to Adversarial Attacks. ICLR 2018.
+[545][Normal] McMahan, H. B., Moore, E., Ramage, D., Hampson, S., & Agüera y Arcas, B. (2017). Communication-Efficient Learning of Deep Networks from Decentralized 
+[546][Normal] Meidan, Y., Bohadana, M., Mathov, Y., Mirsky, Y., Shabtai, A., Breitenbacher, D., & Elovici, Y. (2018). N-BaIoT: Network-Based Detection of IoT Botnet
+[547][Normal] Miettinen, M., Marchal, S., Hafeez, I., Asokan, N., Sadeghi, A.-R., & Tarkoma, S. (2017). IoT SENTINEL: Automated Device-Type Identification for Secur
+[548][Normal] Nguyen, T. D., Marchal, S., Miettinen, M., Fereidooni, H., Asokan, N., & Sadeghi, A.-R. (2019). DÏoT: A Federated Self-learning Anomaly Detection Syst
+[549][Normal] Parmisano, A., Garcia, S., & Erquiaga, M. J. (2020). Stratosphere Laboratory — IoT-23: A labeled dataset with malicious and benign IoT network traffic
+[550][Normal] Schölkopf, B., Platt, J. C., Shawe-Taylor, J., Smola, A. J., & Williamson, R. C. (2001). Estimating the Support of a High-Dimensional Distribution. Ne
+[551][Normal] Sivanathan, A., Gharakheili, H. H., Loi, F., Radford, A., Wijenayake, C., Vishwanath, A., & Sivaraman, V. (2018). Classifying IoT Devices in Smart Env
+[552][Normal] Sivanathan, A., Gharakheili, H. H., & Sivaraman, V. (2019). Managing IoT Cyber-Security using Programmable Telemetry and Machine Learning. IEEE Transa
+[555][Heading 1] APPENDIX A — FEATURE DEFINITIONS
+[556][Heading 2] Complete 37-Feature Vector Specification
+[559][Heading 1] APPENDIX B — API ENDPOINT REFERENCE
+[560][Heading 2] Base URL: https://mdghufran-iot-fingerprinting.hf.space
+[561][Heading 3] GET /health
+[562][First Paragraph] Returns service health status.
+[563][Body Text] Response:
+[564][Source Code] {
+  "status": "healthy",
+  "models_loaded": true,
+  "shap_ready": true,
+  "uptime_seconds": 3612.4,
+  "request_count": 847
+}
+[565][Heading 3] GET /devices
+[566][First Paragraph] Returns list of supported device types with descriptions.
+[567][Heading 3] POST /fingerprint
+[568][First Paragraph] Identifies device type from a 37-feature flow vector.
+[569][Body Text] Request body: FlowFeatures (all 37 features with sensible defaults)
+[570][Body Text] Response:
+[571][Source Code] {
+  "device_type": "smart_camera",
+  "confidence": 0.9823,
+  "is_known": true,
+  "model_used": "voting_ensemble"
+}
+[572][Heading 3] POST /anomaly/score
+[573][First Paragraph] Scores a flow against the per-device anomaly baseline.
+[574][Body Text] Request body:
+[575][Source Code] {
+  "features": { ...FlowFeatures... },
+  "device_type": "smart_camera",
+  "source_ip": "192.168.1.45"
+}
+[576][First Paragraph] Response:
+[577][Source Code] {
+  "device_type": "smart_camera",
+  "anomaly_score": 0.8923,
+  "is_anomalous": true,
+  "severity": "High",
+  "threshold": 0.75
+}
+[578][Heading 3] POST /analyze
+[579][First Paragraph] Combined fingerprinting and anomaly detection in a single request.
+[580][Heading 3] GET /alerts/recent?n=50
+[581][First Paragraph] Returns the last N alerts. Default: 50.
+[582][Heading 3] GET /metrics
+[583][First Paragraph] Returns aggregate metrics including uptime, request count, total alerts, and anomaly rate.
+[584][Heading 3] POST /explain
+[585][First Paragraph] Returns SHAP-based feature attributions for the predicted device type. Accepts a FlowFeatures payload (37 features). Loads SHAP TreeExplainer on the R
+[586][Body Text] Request body: FlowFeatures (all 37 features — same schema as POST /fingerprint)
+[587][Body Text] Response:
+[588][Source Code] {
+  "device_type": "smart_camera",
+  "confidence": 0.9823,
+  "explanation": [
+    {"feature": "tcp_ratio",      "shap_value":  0.238607, "direction": 
+[591][Heading 1] APPENDIX C — SYSTEM REQUIREMENTS AND SETUP
+[592][Heading 2] Hardware Requirements
+[593][Heading 2] Software Setup
+[594][Heading 3] Step 1: Install Python
+[595][First Paragraph] Python 3.9 or higher is required. Verify with:
+[596][Source Code] python --version
+[597][Heading 3] Step 2: Install Dependencies
+[598][Source Code] pip install -r requirements.txt
+[599][First Paragraph] Required packages include: numpy, pandas, scikit-learn, imbalanced-learn, joblib, fastapi, uvicorn, pydantic, dash, plotly, loguru, matplotlib, seabor
+[600][Heading 3] Step 3: Train the Models
+[601][Source Code] python train.py
+[602][First Paragraph] This command: - Generates the synthetic 1,600-flow dataset (saved to data/iot_flows.csv) - Preprocesses with RobustScaler + SMOTE - Trains all fingerp
+[603][Body Text] Expected training time: 2–5 minutes on a modern laptop.
+[604][Heading 3] Step 4: Launch the Framework
+[605][Source Code] python run.py
+[606][First Paragraph] This starts both the FastAPI server (port 8000) and the Plotly Dash dashboard (port 8050).
+[607][Compact] API documentation: https://mdghufran-iot-fingerprinting.hf.space/docs
+[608][Compact] Dashboard: https://mdghufran-iot-fingerprinting.hf.space/dashboard/
+[609][Heading 3] Step 5: Run Tests
+[610][Source Code] pytest tests/ -v
+[611][Heading 2] Running on Real N-BaIoT Data
+[612][First Paragraph] Place the N-BaIoT CSV files in data/nbaiot/ following the directory structure in the project. Then run:
+[613][Source Code] python train.py --mode real
+[614][First Paragraph] or:
+[615][Source Code] python train.py --mode hybrid
+[616][First Paragraph] (Hybrid mode supplements missing device types with synthetic data.)
+[618][First Paragraph] End of Dissertation
+[620][First Paragraph] Md Ghufran Alam Roll Number: NDU202400038 M.Tech Cyber Forensics, Session 2024–2026 NIELIT Srinagar, Jammu & Kashmir May 2026
