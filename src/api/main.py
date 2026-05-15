@@ -14,7 +14,7 @@ from typing import Dict, Any, Optional, List
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 from src.data.preprocessor import Preprocessor
@@ -180,6 +180,11 @@ def health():
         "uptime_seconds": uptime,
         "request_count": _state["request_count"],
     }
+
+
+@app.get("/", include_in_schema=False)
+def root_redirect():
+    return RedirectResponse(url="/dashboard/")
 
 
 @app.get("/status", include_in_schema=False)
