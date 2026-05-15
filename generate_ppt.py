@@ -654,8 +654,11 @@ for ip, dev, conf, sig in devices_demo:
     box(s, sig, 5.8, y+0.07, 7.0, 0.34, size=12, color=LGRAY)
     y += 0.54
 
-box(s, "No hardware access. No credentials. No agent installed on any device.", 0.4, 6.45, 12.5, 0.45,
+box(s, "No hardware access. No credentials. No agent installed on any device.", 0.4, 6.1, 12.5, 0.38,
     size=15, bold=True, color=YELLOW, align=PP_ALIGN.CENTER)
+rect(s, 0.4, 6.55, 12.5, 0.6, RGBColor(0x00, 0x20, 0x40))
+box(s, "Try live:  https://mdghufran-iot-fingerprinting.hf.space/docs  →  POST /fingerprint",
+    0.5, 6.58, 12.3, 0.5, size=14, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
 
 # ─────────────────────────────────────────────
 # SLIDE 11 — Demo: Anomaly Detection
@@ -688,9 +691,12 @@ for label, name, score, sev, bg, sc, desc in tests:
     box(s, desc, 0.5, y+0.55, 12.0, 0.38, size=12, color=LGRAY)
     y += 1.1
 
-rect(s, 0.4, 5.9, 12.5, 0.55, RGBColor(0x00, 0x25, 0x00))
+rect(s, 0.4, 5.7, 12.5, 0.45, RGBColor(0x00, 0x25, 0x00))
 box(s, "Zero false positives on normal traffic.  All 3 attack types detected with correct severity.",
-    0.5, 5.93, 12.3, 0.45, size=15, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
+    0.5, 5.73, 12.3, 0.38, size=14, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
+rect(s, 0.4, 6.2, 12.5, 0.6, RGBColor(0x00, 0x20, 0x40))
+box(s, "Try live:  https://mdghufran-iot-fingerprinting.hf.space/docs  →  POST /anomaly/score  &  POST /analyze",
+    0.5, 6.23, 12.3, 0.5, size=14, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
 
 # ─────────────────────────────────────────────
 # SLIDE 12 — Conclusion
