@@ -2,7 +2,7 @@
 Device Fingerprinting Module.
 Primary: Random Forest (100 trees, max_depth=15).
 Supported: Gradient Boosting, SVM, Voting Ensemble for comparison.
-Confidence threshold 0.75 — below this, device is 'unknown'.
+Confidence threshold 0.60 — below this, device is 'unknown'.
 """
 import numpy as np
 import joblib
@@ -16,7 +16,7 @@ from src.features.extractor import DEVICE_TYPES, LABEL_DEVICE_MAP
 from src.utils.logger import logger
 
 MODELS_DIR = Path(__file__).resolve().parents[2] / "models"
-CONFIDENCE_THRESHOLD = 0.75
+CONFIDENCE_THRESHOLD = 0.60
 
 
 def _build_models():

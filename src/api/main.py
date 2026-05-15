@@ -359,7 +359,10 @@ def analyze(req: AnalyzeRequest):
     X  = prep.transform(df)
 
     device_type, confidence = fp.predict_single(X[0])
-    effective_device = device_type if device_type != "unknown" else "smart_camera"
+    # Use best-guess class for anomaly model even when confidence < threshold
+    best_guess = fp._models[fp._primary].predict(X)[0]
+    from src.features.extractor import LABEL_DEVICE_MAP
+    effective_device = device_type if device_type != "unknown" else LABEL_DEVICE_MAP[best_guess]
     score      = ad.score_single(X[0], effective_device)
     is_anomaly = ad.is_anomalous(score)
 
@@ -372,11 +375,12 @@ def analyze(req: AnalyzeRequest):
                 break
 
     source_ip = req.source_ip or _random_ip()
-    alert_mgr.process(source_ip, device_type, score)
+    # Log alert with effective_device so table never shows "unknown"
+    alert_mgr.process(source_ip, effective_device, score)
 
     return {
         "fingerprint": {
-            "device_type": device_type,
+            "device_type": effective_device,
             "confidence":  round(confidence, 4),
             "is_known":    device_type != "unknown",
         },
