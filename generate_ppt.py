@@ -207,7 +207,7 @@ arch_box(s, "Top-10 Feature\nContributions", 9.4, 4.8, 3.5, 0.7, bg=RGBColor(0x2
 
 box(s, "▼", 6.5, 5.55, 0.4, 0.35, size=18, color=ACCENT, align=PP_ALIGN.CENTER)
 
-arch_box(s, "Alert Manager  →  FastAPI REST API  +  Plotly Dash Dashboard", 1.0, 5.9, 11.5, 0.7,
+arch_box(s, "Alert Manager  →  FastAPI REST API  +  Live Plotly.js Dashboard", 1.0, 5.9, 11.5, 0.7,
          bg=RGBColor(0x00,0x20,0x40), sz=15)
 
 # ─────────────────────────────────────────────
@@ -516,7 +516,7 @@ shap_impl = [
     "TreeExplainer (faster than KernelExplainer)",
     "Runs on Random Forest model",
     "POST /explain endpoint",
-    "Live panel in Dash dashboard",
+    "Live panel in monitoring dashboard",
     "Updates every prediction",
     "Sub-30ms response time",
 ]
@@ -540,7 +540,7 @@ box(s, "SDK: Docker  |  Visibility: Public  |  Free tier", 0.5, 1.5, 5.3, 0.4, s
 
 rect(s, 6.4, 1.0, 6.5, 1.2, RGBColor(0x00, 0x20, 0x35))
 box(s, "Single Port Deployment (7860)", 6.5, 1.05, 6.3, 0.45, size=14, bold=True, color=YELLOW)
-box(s, "FastAPI API + Plotly Dash mounted via WSGIMiddleware", 6.5, 1.5, 6.3, 0.4, size=13, color=LGRAY)
+box(s, "FastAPI serves API + Dashboard on single port 7860", 6.5, 1.5, 6.3, 0.4, size=13, color=LGRAY)
 
 # URL list
 urls = [
@@ -660,7 +660,7 @@ contributions = [
     ("Explainability", "SHAP TreeExplainer provides real-time top-10 feature contributions for every prediction"),
     ("Production Deploy", "Live on HuggingFace Spaces — publicly accessible, sub-40ms latency, 2.1h+ uptime"),
     ("REST API", "8 FastAPI endpoints including combined /analyze, /explain, /alerts/recent"),
-    ("Dashboard", "Plotly Dash live monitoring with anomaly timeline, severity chart, SHAP panel"),
+    ("Dashboard", "Live Plotly.js monitoring dashboard with anomaly timeline, severity chart, real-time alert feed"),
     ("Dataset", "Trained on real N-BaIoT dataset (UCI #442) with real Mirai & BASHLITE attack traffic"),
     ("Open Source", "Full code available on GitHub — reproducible, extensible, MIT licensed"),
 ]
