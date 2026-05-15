@@ -7,7 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python train.py
+# Train models at build time so cold starts are instant
+RUN python train.py || echo "train.py warning — models will train on first boot"
 
 EXPOSE 7860
 
