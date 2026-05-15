@@ -890,6 +890,10 @@ a.btn:hover{background:#283593}
   <div id="alerts-table"><p style="color:#607D8B;font-style:italic">Loading alerts...</p></div>
 </div>
 
+<div class="charts-row" style="margin-top:18px">
+  <div class="chart-box" style="flex:1"><h3>&#x1F9E0; Live SHAP Explainability — Last Prediction</h3><div id="chart-shap" style="height:280px"></div></div>
+</div>
+
 <div class="links">
   <a class="btn" href="/docs">📡 API Docs (Swagger)</a>
   <a class="btn" href="/status">🟢 Status Page</a>
@@ -1016,6 +1020,40 @@ async function refresh(){
     html+='</tbody></table>';
     box.innerHTML=html;
   }
+
+  // SHAP chart — call /explain with last used flow
+  try {
+    const shapRes = await fetch('/explain', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(flow)});
+    if(shapRes.ok){
+      const shapData = await shapRes.json();
+      const explanation = shapData?.explanation ?? [];
+      if(explanation.length){
+        const feats  = explanation.map(e=>e.feature).reverse();
+        const vals   = explanation.map(e=>e.shap_value).reverse();
+        const colors = vals.map(v=>v>=0?'#00FF88':'#FF5555');
+        Plotly.react('chart-shap',[{
+          type:'bar', orientation:'h',
+          x:vals, y:feats,
+          marker:{color:colors},
+          text:vals.map(v=>(v>=0?'+':'')+v.toFixed(4)),
+          textposition:'outside', textfont:{color:'#E0E0E0',size:10}
+        }],{
+          paper_bgcolor:'#1A1F2E', plot_bgcolor:'#12161F',
+          font:{color:'#E0E0E0',size:11},
+          margin:{l:160,r:60,t:10,b:40},
+          xaxis:{gridcolor:'#1f2535',zeroline:true,zerolinecolor:'#AAAAAA',zerolinewidth:1},
+          yaxis:{gridcolor:'#1f2535'},
+          annotations:[{
+            x:0.01, y:1.05, xref:'paper', yref:'paper', showarrow:false,
+            text:`Device: <b style="color:#00D4FF">${shapData.device_type}</b> | Confidence: <b>${(shapData.confidence*100).toFixed(0)}%</b>`,
+            font:{color:'#CCCCCC',size:11}
+          }]
+        },{responsive:true});
+      }
+    }
+  } catch(e){}
 }
 
 refresh();
