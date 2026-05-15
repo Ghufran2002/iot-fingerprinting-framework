@@ -1022,6 +1022,7 @@ async function refresh(){
   }
 
   // SHAP chart — call /explain with last used flow
+  const shapDiv = document.getElementById('chart-shap');
   try {
     const shapRes = await fetch('/explain', {method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -1047,13 +1048,20 @@ async function refresh(){
           yaxis:{gridcolor:'#1f2535'},
           annotations:[{
             x:0.01, y:1.05, xref:'paper', yref:'paper', showarrow:false,
-            text:`Device: <b style="color:#00D4FF">${shapData.device_type}</b> | Confidence: <b>${(shapData.confidence*100).toFixed(0)}%</b>`,
-            font:{color:'#CCCCCC',size:11}
+            text:`Device: <b>${shapData.device_type}</b> | Confidence: <b>${(shapData.confidence*100).toFixed(0)}%</b>`,
+            font:{color:'#00D4FF',size:12}
           }]
         },{responsive:true});
+      } else {
+        shapDiv.innerHTML='<p style="color:#607D8B;padding:20px">SHAP data empty — retrying next refresh.</p>';
       }
+    } else {
+      const errData = await shapRes.json().catch(()=>({}));
+      shapDiv.innerHTML=`<p style="color:#FF5555;padding:20px">SHAP unavailable (${shapRes.status}): ${errData.detail||'check server logs'}</p>`;
     }
-  } catch(e){}
+  } catch(e){
+    shapDiv.innerHTML=`<p style="color:#FF5555;padding:20px">SHAP error: ${e.message}</p>`;
+  }
 }
 
 refresh();
