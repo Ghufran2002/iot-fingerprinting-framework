@@ -913,40 +913,27 @@ async function refresh(){
   }
 
   // Auto-simulate a real API call every refresh — increments request_count & creates alerts
-  const DEVICES = ['smart_camera','smart_thermostat','smart_tv','smart_bulb',
-                   'smart_plug','smart_speaker','smart_doorbell','motion_sensor'];
-  const PROFILES = {
-    smart_camera:    {tcp_ratio:0.92,udp_ratio:0.08,is_https:1,is_mqtt:0,is_coap:0,mean_dest_port:443,packet_rate:400,byte_rate:2800000,upload_download_ratio:2.6,mean_pkt_size:1400,unique_dest_ips:2},
-    smart_thermostat:{tcp_ratio:0.55,udp_ratio:0.45,is_https:0,is_mqtt:1,is_coap:0,mean_dest_port:1883,packet_rate:4,byte_rate:300,upload_download_ratio:2.0,mean_pkt_size:80,unique_dest_ips:1},
-    smart_tv:        {tcp_ratio:0.85,udp_ratio:0.15,is_https:1,is_mqtt:0,is_coap:0,mean_dest_port:443,packet_rate:500,byte_rate:50000,upload_download_ratio:0.11,mean_pkt_size:900,unique_dest_ips:8},
-    smart_bulb:      {tcp_ratio:0.10,udp_ratio:0.90,is_https:0,is_mqtt:0,is_coap:1,mean_dest_port:5683,packet_rate:1,byte_rate:50,upload_download_ratio:1.5,mean_pkt_size:60,unique_dest_ips:1},
-    smart_plug:      {tcp_ratio:0.60,udp_ratio:0.40,is_https:0,is_mqtt:1,is_coap:0,mean_dest_port:1883,packet_rate:3,byte_rate:200,upload_download_ratio:1.5,mean_pkt_size:70,unique_dest_ips:1},
-    smart_speaker:   {tcp_ratio:0.70,udp_ratio:0.30,is_https:1,is_mqtt:0,is_coap:0,mean_dest_port:443,packet_rate:50,byte_rate:5000,upload_download_ratio:1.5,mean_pkt_size:500,unique_dest_ips:4},
-    smart_doorbell:  {tcp_ratio:0.80,udp_ratio:0.20,is_https:1,is_mqtt:0,is_coap:0,mean_dest_port:443,packet_rate:90,byte_rate:9000,upload_download_ratio:2.0,mean_pkt_size:600,unique_dest_ips:2},
-    motion_sensor:   {tcp_ratio:0.20,udp_ratio:0.80,is_https:0,is_mqtt:1,is_coap:0,mean_dest_port:1883,packet_rate:1,byte_rate:100,upload_download_ratio:2.3,mean_pkt_size:50,unique_dest_ips:1},
+  const FLOWS = {
+    smart_camera:    {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:2000,byte_count:180000,packet_rate:200,byte_rate:18000,mean_pkt_size:90,std_pkt_size:20,min_pkt_size:64,max_pkt_size:1500,tcp_ratio:0.92,udp_ratio:0.08,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.65,is_https:1,is_mqtt:0,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:3,well_known_port_ratio:0.95,is_encrypted:1,upload_bytes:130000,download_bytes:50000,upload_download_ratio:2.6,unique_dest_ports:2,unique_dest_ips:2,port_entropy:0.5,ip_entropy:0.8,well_known_ports_count:2,mean_dest_port:443,std_dest_port:15},
+    smart_thermostat:{flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:40,byte_count:3000,packet_rate:4,byte_rate:300,mean_pkt_size:75,std_pkt_size:10,min_pkt_size:64,max_pkt_size:200,tcp_ratio:0.55,udp_ratio:0.45,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.35,is_https:0,is_mqtt:1,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:1,well_known_port_ratio:0.3,is_encrypted:0,upload_bytes:2000,download_bytes:1000,upload_download_ratio:2.0,unique_dest_ports:1,unique_dest_ips:1,port_entropy:0.3,ip_entropy:0.5,well_known_ports_count:1,mean_dest_port:1883,std_dest_port:5},
+    smart_tv:        {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:5000,byte_count:500000,packet_rate:500,byte_rate:50000,mean_pkt_size:100,std_pkt_size:30,min_pkt_size:64,max_pkt_size:1500,tcp_ratio:0.85,udp_ratio:0.15,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.60,is_https:1,is_mqtt:0,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:10,well_known_port_ratio:0.85,is_encrypted:1,upload_bytes:50000,download_bytes:450000,upload_download_ratio:0.11,unique_dest_ports:5,unique_dest_ips:8,port_entropy:1.5,ip_entropy:2.1,well_known_ports_count:4,mean_dest_port:443,std_dest_port:80},
+    smart_bulb:      {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:10,byte_count:500,packet_rate:1,byte_rate:50,mean_pkt_size:50,std_pkt_size:5,min_pkt_size:40,max_pkt_size:80,tcp_ratio:0.10,udp_ratio:0.90,syn_ratio:0.005,fin_ratio:0.003,rst_ratio:0.001,ack_ratio:0.05,is_https:0,is_mqtt:0,is_coap:1,is_mdns:0,is_ntp:0,dns_query_count:0,well_known_port_ratio:0.1,is_encrypted:0,upload_bytes:300,download_bytes:200,upload_download_ratio:1.5,unique_dest_ports:1,unique_dest_ips:1,port_entropy:0.1,ip_entropy:0.3,well_known_ports_count:0,mean_dest_port:5683,std_dest_port:2},
+    smart_plug:      {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:30,byte_count:2000,packet_rate:3,byte_rate:200,mean_pkt_size:67,std_pkt_size:8,min_pkt_size:50,max_pkt_size:150,tcp_ratio:0.60,udp_ratio:0.40,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.40,is_https:0,is_mqtt:1,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:1,well_known_port_ratio:0.3,is_encrypted:0,upload_bytes:1200,download_bytes:800,upload_download_ratio:1.5,unique_dest_ports:1,unique_dest_ips:1,port_entropy:0.3,ip_entropy:0.4,well_known_ports_count:1,mean_dest_port:1883,std_dest_port:5},
+    smart_speaker:   {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:500,byte_count:50000,packet_rate:50,byte_rate:5000,mean_pkt_size:100,std_pkt_size:25,min_pkt_size:64,max_pkt_size:1000,tcp_ratio:0.70,udp_ratio:0.30,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.50,is_https:1,is_mqtt:0,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:5,well_known_port_ratio:0.75,is_encrypted:1,upload_bytes:30000,download_bytes:20000,upload_download_ratio:1.5,unique_dest_ports:3,unique_dest_ips:4,port_entropy:1.0,ip_entropy:1.2,well_known_ports_count:3,mean_dest_port:443,std_dest_port:30},
+    smart_doorbell:  {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:900,byte_count:90000,packet_rate:90,byte_rate:9000,mean_pkt_size:100,std_pkt_size:20,min_pkt_size:64,max_pkt_size:1200,tcp_ratio:0.80,udp_ratio:0.20,syn_ratio:0.01,fin_ratio:0.008,rst_ratio:0.002,ack_ratio:0.55,is_https:1,is_mqtt:0,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:3,well_known_port_ratio:0.90,is_encrypted:1,upload_bytes:60000,download_bytes:30000,upload_download_ratio:2.0,unique_dest_ports:2,unique_dest_ips:2,port_entropy:0.6,ip_entropy:0.8,well_known_ports_count:2,mean_dest_port:443,std_dest_port:20},
+    motion_sensor:   {flow_duration:10,mean_iat:0.01,std_iat:0.005,min_iat:0.001,max_iat:0.05,packet_count:15,byte_count:1000,packet_rate:1.5,byte_rate:100,mean_pkt_size:67,std_pkt_size:8,min_pkt_size:50,max_pkt_size:120,tcp_ratio:0.20,udp_ratio:0.80,syn_ratio:0.005,fin_ratio:0.003,rst_ratio:0.001,ack_ratio:0.15,is_https:0,is_mqtt:1,is_coap:0,is_mdns:0,is_ntp:0,dns_query_count:0,well_known_port_ratio:0.2,is_encrypted:0,upload_bytes:700,download_bytes:300,upload_download_ratio:2.3,unique_dest_ports:1,unique_dest_ips:1,port_entropy:0.2,ip_entropy:0.3,well_known_ports_count:0,mean_dest_port:1883,std_dest_port:3},
   };
-  const dev = DEVICES[Math.floor(Math.random()*DEVICES.length)];
-  const prof = PROFILES[dev];
+  const DEVLIST = Object.keys(FLOWS);
+  const dev = DEVLIST[Math.floor(Math.random()*DEVLIST.length)];
+  const baseFlow = {...FLOWS[dev]};
   // ~10% chance of injecting attack-like features
   const isAttack = Math.random() < 0.10;
-  const flow = {
-    flow_duration:10, mean_iat:0.01, std_iat:0.005, min_iat:0.001, max_iat:0.05,
-    packet_count: isAttack ? 50000 : 100,
-    byte_count: isAttack ? 500000000 : 50000,
-    packet_rate: isAttack ? prof.packet_rate*30 : prof.packet_rate,
-    byte_rate: isAttack ? prof.byte_rate*30 : prof.byte_rate,
-    mean_pkt_size:prof.mean_pkt_size, std_pkt_size:50, min_pkt_size:64, max_pkt_size:1500,
-    tcp_ratio:prof.tcp_ratio, udp_ratio:prof.udp_ratio,
-    syn_ratio:0.01, fin_ratio:0.008, rst_ratio:0.002, ack_ratio:0.5,
-    is_https:prof.is_https, is_mqtt:prof.is_mqtt, is_coap:prof.is_coap,
-    is_mdns:0, is_ntp:0, dns_query_count:2, well_known_port_ratio:0.7, is_encrypted:prof.is_https,
-    upload_bytes: isAttack ? 400000000 : 25000,
-    download_bytes:10000,
-    upload_download_ratio: isAttack ? 80 : prof.upload_download_ratio,
-    unique_dest_ports:2, unique_dest_ips:prof.unique_dest_ips,
-    port_entropy:1.0, ip_entropy:0.8, well_known_ports_count:2,
-    mean_dest_port:prof.mean_dest_port, std_dest_port:20
-  };
+  const flow = isAttack ? {...baseFlow,
+    packet_count:baseFlow.packet_count*25, byte_count:baseFlow.byte_count*30,
+    packet_rate:baseFlow.packet_rate*25, byte_rate:baseFlow.byte_rate*30,
+    upload_bytes:baseFlow.upload_bytes*50, upload_download_ratio:80,
+    unique_dest_ips:baseFlow.unique_dest_ips*5, port_entropy:3.5
+  } : baseFlow;
   let score = 0.2;
   try {
     const res = await fetch('/analyze', {method:'POST',
