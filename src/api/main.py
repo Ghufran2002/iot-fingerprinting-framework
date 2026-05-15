@@ -14,7 +14,7 @@ from typing import Dict, Any, Optional, List
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 from src.data.preprocessor import Preprocessor
@@ -487,6 +487,11 @@ def metrics():
         "supported_devices": len(DEVICE_TYPES),
         "feature_count":     len(FEATURE_NAMES),
     }
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/dashboard/")
 
 
 @app.post("/demo/inject", tags=["Demo"])
