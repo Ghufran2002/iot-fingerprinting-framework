@@ -1,7 +1,7 @@
 """
 Hugging Face Spaces entry point.
 FastAPI runs on $PORT (7860).
-Dashboard is mounted inside FastAPI at /dashboard/
+Dash dashboard mounted at root "/" — FastAPI routes take priority.
 API docs available at /docs
 """
 import os
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT))
 
-os.environ.setdefault("DASH_PREFIX", "/dashboard/")
+os.environ["DASH_PREFIX"] = "/"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
