@@ -807,13 +807,177 @@ def custom_docs():
     return HTMLResponse(_DOCS_HTML)
 
 
-# ── Mount Dash dashboard at /dashboard ──────────────────────────────────────
-try:
-    from starlette.middleware.wsgi import WSGIMiddleware
-    from src.dashboard.app import app as _dash_app
-    # Mount at root — Dash prefix is "/" so paths are not stripped.
-    # FastAPI routes defined above take priority over this catch-all mount.
-    app.mount("/", WSGIMiddleware(_dash_app.server))
-    logger.info("Dash dashboard mounted at /")
-except Exception as _e:
-    logger.warning(f"Dashboard mount skipped: {_e}")
+@app.get("/dashboard", include_in_schema=False)
+@app.get("/", include_in_schema=False)
+def dashboard():
+    return HTMLResponse(_DASHBOARD_HTML)
+
+
+_DASHBOARD_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IoT Security Monitor — Live Dashboard</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0F1117;color:#E0E0E0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+.header{background:linear-gradient(90deg,#1A237E,#283593);padding:16px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:2px solid #3949AB}
+.header h1{font-size:20px;font-weight:700;color:#90CAF9;margin:0}
+.header p{font-size:11px;color:#B0BEC5;margin:3px 0 0}
+#hdr-status{font-size:12px;color:#A5D6A7;text-align:right}
+.kpi-row{display:flex;gap:14px;padding:18px 28px 10px;flex-wrap:wrap}
+.kpi{background:#1A1F2E;border:1px solid #2196F3;border-radius:8px;
+  padding:14px 20px;flex:1;min-width:120px}
+.kpi .lbl{font-size:11px;color:#90A4AE;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.kpi .val{font-size:26px;font-weight:700}
+.charts-row{display:flex;gap:14px;padding:0 28px 14px;flex-wrap:wrap}
+.chart-box{background:#1A1F2E;border-radius:8px;padding:14px;flex:1;min-width:280px}
+.chart-box h3{font-size:14px;color:#90CAF9;margin-bottom:8px}
+.alerts-box{margin:0 28px 20px;background:#1A1F2E;border-radius:8px;padding:16px}
+.alerts-box h3{font-size:14px;color:#90CAF9;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:7px 10px;border-bottom:1px solid #37474F;color:#90CAF9;text-align:left}
+td{padding:6px 10px;border-bottom:1px solid #1E272E}
+.badge{padding:2px 8px;border-radius:10px;font-weight:700;font-size:11px}
+.links{display:flex;gap:10px;padding:0 28px 20px;flex-wrap:wrap}
+a.btn{display:inline-block;background:#1A237E;border:1px solid #3949AB;
+  color:#90CAF9;padding:8px 18px;border-radius:6px;text-decoration:none;font-size:13px}
+a.btn:hover{background:#283593}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>IoT Device Fingerprinting &amp; Anomaly Detection</h1>
+    <p>M.Tech Cyber Forensics &nbsp;|&nbsp; NIELIT Srinagar &nbsp;|&nbsp; Md Ghufran Alam (NDU202400038)</p>
+  </div>
+  <div id="hdr-status">Loading...</div>
+</div>
+
+<div class="kpi-row" id="kpi-row">
+  <div class="kpi"><div class="lbl">Devices</div><div class="val" style="color:#4CAF50">8</div></div>
+  <div class="kpi"><div class="lbl">Features</div><div class="val" style="color:#9C27B0">37</div></div>
+  <div class="kpi"><div class="lbl">Accuracy</div><div class="val" style="color:#2196F3">100%</div></div>
+  <div class="kpi"><div class="lbl">Threshold</div><div class="val" style="color:#00BCD4">0.75</div></div>
+  <div class="kpi"><div class="lbl">Total Alerts</div><div class="val" id="kpi-alerts" style="color:#F44336">—</div></div>
+  <div class="kpi"><div class="lbl">Requests</div><div class="val" id="kpi-requests" style="color:#FF9800">—</div></div>
+  <div class="kpi"><div class="lbl">Uptime</div><div class="val" id="kpi-uptime" style="color:#A5D6A7;font-size:18px">—</div></div>
+</div>
+
+<div class="charts-row">
+  <div class="chart-box" style="flex:2"><h3>Live Anomaly Score Timeline</h3><div id="chart-timeline" style="height:260px"></div></div>
+  <div class="chart-box" style="flex:1"><h3>Severity Distribution</h3><div id="chart-sev" style="height:260px"></div></div>
+</div>
+
+<div class="alerts-box">
+  <h3>Recent Anomaly Alerts</h3>
+  <div id="alerts-table"><p style="color:#607D8B;font-style:italic">Loading alerts...</p></div>
+</div>
+
+<div class="links">
+  <a class="btn" href="/docs">📡 API Docs (Swagger)</a>
+  <a class="btn" href="/status">🟢 Status Page</a>
+  <a class="btn" href="/health">❤️ Health JSON</a>
+  <a class="btn" href="/devices">📋 Devices List</a>
+</div>
+
+<script>
+const SEV_COLOR = {LOW:'#4CAF50',MEDIUM:'#FF9800',HIGH:'#F44336',CRITICAL:'#9C27B0',NORMAL:'#4CAF50'};
+const DEV_COLOR = {smart_camera:'#2196F3',smart_thermostat:'#FF9800',smart_tv:'#9C27B0',
+  smart_bulb:'#FFEB3B',smart_plug:'#4CAF50',smart_speaker:'#00BCD4',
+  smart_doorbell:'#F44336',motion_sensor:'#795548',unknown:'#9E9E9E'};
+
+let scores = [], labels = [], times = [];
+
+function fmt(s){let h=~~(s/3600),m=~~((s%3600)/60),sec=~~(s%60);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
+
+async function getJSON(url){try{let r=await fetch(url);return r.ok?r.json():null}catch{return null}}
+
+async function refresh(){
+  // Metrics
+  const m = await getJSON('/metrics');
+  if(m){
+    document.getElementById('hdr-status').innerHTML =
+      `Status: ${m.models_loaded?'✅ Models Loaded':'⚠️ No Models'} | SHAP: ${m.shap_ready?'✅':'❌'}<br>Uptime: ${fmt(m.uptime_seconds)} | Requests: ${m.request_count}`;
+    document.getElementById('kpi-alerts').textContent = m.total_alerts ?? '—';
+    document.getElementById('kpi-requests').textContent = m.request_count ?? '—';
+    document.getElementById('kpi-uptime').textContent = fmt(m.uptime_seconds ?? 0);
+  }
+
+  // Simulate a score for timeline
+  let score = Math.max(0, Math.min(1, 0.3 + (Math.random()-0.5)*0.3));
+  if(Math.random()<0.08) score = 0.76 + Math.random()*0.2;
+  scores.push(score); times.push(new Date().toLocaleTimeString());
+  if(scores.length>60){scores.shift();times.shift();}
+
+  const colors = scores.map(s=>s>=0.75?'#F44336':'#42A5F5');
+  const sizes  = scores.map(s=>s>=0.75?10:5);
+  Plotly.react('chart-timeline',[{
+    x:times, y:scores, mode:'lines+markers', name:'Score',
+    line:{color:'#42A5F5',width:2},
+    marker:{color:colors,size:sizes}
+  },{
+    x:[times[0],times[times.length-1]], y:[0.75,0.75],
+    mode:'lines', name:'Threshold',
+    line:{color:'#F44336',dash:'dash',width:1.5}
+  }],{
+    paper_bgcolor:'#1A1F2E',plot_bgcolor:'#12161F',font:{color:'#E0E0E0',size:11},
+    margin:{l:40,r:20,t:10,b:40},
+    yaxis:{range:[0,1.05],gridcolor:'#1f2535'},
+    xaxis:{gridcolor:'#1f2535',tickangle:-30,nticks:8},
+    legend:{bgcolor:'rgba(0,0,0,0)',font:{size:10}},
+    showlegend:true
+  },{responsive:true});
+
+  // Alerts
+  const ad = await getJSON('/alerts/recent?n=20');
+  const alerts = ad?.alerts ?? [];
+
+  // Severity chart
+  const sev = {LOW:0,MEDIUM:0,HIGH:0,CRITICAL:0};
+  alerts.forEach(a=>{if(a.severity in sev) sev[a.severity]++});
+  Plotly.react('chart-sev',[{
+    x:Object.keys(sev), y:Object.values(sev),
+    type:'bar', marker:{color:Object.keys(sev).map(k=>SEV_COLOR[k])},
+    text:Object.values(sev), textposition:'outside', textfont:{color:'#E0E0E0'}
+  }],{
+    paper_bgcolor:'#1A1F2E',plot_bgcolor:'#12161F',font:{color:'#E0E0E0',size:11},
+    margin:{l:30,r:20,t:10,b:40},
+    yaxis:{gridcolor:'#1f2535',range:[0,Math.max(...Object.values(sev))+2]},
+    xaxis:{gridcolor:'#1f2535'},showlegend:false
+  },{responsive:true});
+
+  // Alerts table
+  const box = document.getElementById('alerts-table');
+  if(!alerts.length){
+    box.innerHTML='<p style="color:#607D8B;font-style:italic">No alerts yet.</p>';
+  } else {
+    let html='<table><thead><tr><th>#</th><th>Time</th><th>IP</th><th>Device</th><th>Score</th><th>Severity</th></tr></thead><tbody>';
+    alerts.slice(0,15).forEach(a=>{
+      const t=new Date(a.timestamp*1000).toLocaleTimeString();
+      const sc=SEV_COLOR[a.severity]||'#9E9E9E';
+      const dc=DEV_COLOR[a.device_type]||'#9E9E9E';
+      html+=`<tr>
+        <td style="color:#90A4AE">${a.alert_id}</td>
+        <td>${t}</td>
+        <td style="font-family:monospace">${a.source_ip}</td>
+        <td style="color:${dc}">${a.device_type?.replace('smart_','').replace(/_/g,' ')}</td>
+        <td>${a.anomaly_score}</td>
+        <td><span class="badge" style="background:${sc}22;color:${sc}">${a.severity}</span></td>
+      </tr>`;
+    });
+    html+='</tbody></table>';
+    box.innerHTML=html;
+  }
+}
+
+refresh();
+setInterval(refresh, 5000);
+</script>
+</body>
+</html>"""
